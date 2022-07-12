@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-07-12 Tue 10:21 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Installing Haskell</title>
+<meta name="author" content="Mattox Beckman" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="stylesheet" href="../css/tufte.css" type="text/css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Installing Haskell
+<br />
+<span class="subtitle">Getting started is the hardest part</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org386b24b">Objectives</a></li>
+<li><a href="#orgd4096df">Installation</a>
+<ul>
+<li><a href="#org0ff539e">Recommended Method: <code>ghcup</code></a></li>
+<li><a href="#org5f295ef">Linux options</a></li>
+<li><a href="#org0f9674b">Mac Options</a></li>
+<li><a href="#org9befc7b">Windows Options</a></li>
+<li><a href="#org736b2e3">What should I install?</a></li>
+</ul>
+</li>
+<li><a href="#org38ef976">The Tools</a>
+<ul>
+<li><a href="#org8eee351"><code>ghc</code></a></li>
+<li><a href="#org11c265f"><code>ghci</code></a></li>
+<li><a href="#org333162a"><code>stack</code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org386b24b" class="outline-2">
+<h2 id="org386b24b">Objectives</h2>
+<div class="outline-text-2" id="text-org386b24b">
+<p>
+When you are done with this chapter, you will&#x2026;
+</p>
+
+<ul class="org-ul">
+<li>be able to describe the difference between <span class="sc">Haskell</span> tools such as <code>ghc</code>, <code>ghci</code>, and <code>stack</code>, and</li>
+<li>install these things on your computer.</li>
+</ul>
+
+<p>
+This kind of information tends to become out of date quickly, but the advantage of publishing to html is that we can
+also update this quickly.  Let us know if something is out of date.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd4096df" class="outline-2">
+<h2 id="orgd4096df">Installation</h2>
+<div class="outline-text-2" id="text-orgd4096df">
+</div>
+<div id="outline-container-org0ff539e" class="outline-3">
+<h3 id="org0ff539e">Recommended Method: <code>ghcup</code></h3>
+<div class="outline-text-3" id="text-org0ff539e">
+<p>
+The <span class="sc">Haskell</span> site has an installer called <a href="https://www.haskell.org/ghcup/"><code>ghcup</code></a> that is multi-platform.  If you
+are not generally comfortable installing things on your computer (and even if you are) then this is one of the better
+choices.  If you are running windows, then use this with the <a href="https://devblogs.microsoft.com/commandline/a-guide-to-invoking-wsl/">Windows Subsystem for Linux</a> (usually
+just called <code>WSL</code>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5f295ef" class="outline-3">
+<h3 id="org5f295ef">Linux options</h3>
+<div class="outline-text-3" id="text-org5f295ef">
+<p>
+If you are running Linux, then your package manager might also be a good option.  This is particularly true of
+<a href="https://nixos.org">nixos</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0f9674b" class="outline-3">
+<h3 id="org0f9674b">Mac Options</h3>
+<div class="outline-text-3" id="text-org0f9674b">
+<p>
+For Apple computers, you might want to use the <i>homebrew</i> system.
+</p>
+
+<pre class="code"><code>$ brew install haskell-stack
+</code></pre>
+</div>
+</div>
+
+<div id="outline-container-org9befc7b" class="outline-3">
+<h3 id="org9befc7b">Windows Options</h3>
+<div class="outline-text-3" id="text-org9befc7b">
+<p>
+First take a Linux installation disk and &#x2026; no?  Okay, fine.  Using <code>ghcup</code> as described above is probably your best
+bet.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org736b2e3" class="outline-3">
+<h3 id="org736b2e3">What should I install?</h3>
+<div class="outline-text-3" id="text-org736b2e3">
+<p>
+You will need <code>ghc</code> and <code>stack</code>, and we also recommend <code>cabal</code> and <code>HLS</code>.  We&rsquo;ll describe these next.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org38ef976" class="outline-2">
+<h2 id="org38ef976">The Tools</h2>
+<div class="outline-text-2" id="text-org38ef976">
+<p>
+Now that you&rsquo;ve install these things, here is what they do.
+</p>
+</div>
+
+<div id="outline-container-org8eee351" class="outline-3">
+<h3 id="org8eee351"><code>ghc</code></h3>
+<div class="outline-text-3" id="text-org8eee351">
+<p>
+The main compiler is called <code>ghc</code>, standing for Glasgow Haskell Compiler.  You can compile a program with it into a
+standalone executable.  If you create a file <code>hello.hs</code> with this content:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">main</span> <span style="color: #dcaeea;">=</span> <span style="color: #51afef;">do</span> putStrLn <span style="color: #98be65;">"Hello, world!"</span>
+</code></pre>
+
+<p>
+This creates a <code>main</code> function that does the traditional thing.  You can compile and run it from the command line<label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle"/><span class="sidenote">
+We will use Linux for our command line examples, but we try to be OS agnostic in the course.  The <code>$</code> will be the
+command line prompt.  Whatever system you use, as CS students you should absolutely be comfortable using the command
+line.
+</span> with:
+</p>
+
+<pre class="code"><code>$ gch foo.hs
+$ ./foo
+Hello, world!
+</code></pre>
+</div>
+</div>
+
+<div id="outline-container-org11c265f" class="outline-3">
+<h3 id="org11c265f"><code>ghci</code></h3>
+<div class="outline-text-3" id="text-org11c265f">
+<p>
+You will not be using the standalone compiler much in this course.  You will be using the interactive version called
+<code>ghci</code>, where the <code>i</code> stands for <i>interactive</i>.  This tool gives you an interactive shell that lets you prototype and
+test your code.  If you have used <span class="sc">Python</span>, <span class="sc">Ruby</span>, or any <span class="sc">Lisp</span> dialect, this will
+be familiar to you.  We call this kind of thing a REPL, abbreviating Read Eval Print Loop.
+</p>
+
+<p>
+The simplest way to start it is to run <code>ghci</code> with the file name.  The prompt will be something like <code>Prelude&gt;</code> if you
+have not loaded a file or <code>Main&gt;</code>, depending on the module name.  Use control-D to exit.  In this example you can see
+us run the <code>main</code> function.
+</p>
+
+<pre class="code"><code>$ ghci foo.hs
+GHCi, version 8.10.7: https://www.haskell.org/ghc/  :? for help
+<span style="color: #51afef;">[</span><span style="color: #da8548; font-weight: bold;">1</span> of <span style="color: #da8548; font-weight: bold;">1</span><span style="color: #51afef;">]</span> Compiling Main             <span style="color: #51afef;">(</span> foo.hs, interpreted <span style="color: #51afef;">)</span>
+Ok, one module loaded.
+*Main&gt; main
+Hello, world.
+*Main&gt;
+Leaving GHCi.
+</code></pre>
+
+<p>
+You can also start the REPL by itself.  In addition to running <span class="sc">Haskell</span> code, you can use <code>:l</code> to load a
+file and <code>:r</code> to reload a file for example after you have changed something.
+</p>
+
+<pre class="code"><code>$ ghci
+GHCi, version 8.10.7: https://www.haskell.org/ghc/  :? for help
+Prelude&gt; :load foo
+<span style="color: #51afef;">[</span><span style="color: #da8548; font-weight: bold;">1</span> of <span style="color: #da8548; font-weight: bold;">1</span><span style="color: #51afef;">]</span> Compiling Main             <span style="color: #51afef;">(</span> foo.hs, interpreted <span style="color: #51afef;">)</span>
+Ok, one module loaded.
+*Main&gt; main
+Hello, world.
+*Main&gt; :r
+Ok, one module loaded.
+*Main&gt; main
+Hello, world.
+*Main&gt;
+</code></pre>
+
+<p>
+A common workflow is to have your favorite editor running in one window and the REPL running in another.  Note that
+running <code>:r</code> will erase anything you defined in the REPL earlier.  Another useful command is <code>:t</code>, which will tell you
+the type of any expression.
+</p>
+
+<pre class="code"><code>$ ghci
+GHCi, version 8.10.7: https://www.haskell.org/ghc/  :? for help
+Prelude&gt; :t <span style="color: #da8548; font-weight: bold;">12</span>
+<span style="color: #da8548; font-weight: bold;">12</span> :: Num <span style="color: #dcaeea;">p</span> =&gt; p
+Prelude&gt; :t <span style="color: #98be65;">"hi"</span>
+<span style="color: #98be65;">"hi"</span> :: <span style="color: #51afef;">[</span>Char<span style="color: #51afef;">]</span>
+</code></pre>
+
+<p>
+We will explain the types in a different section.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org333162a" class="outline-3">
+<h3 id="org333162a"><code>stack</code></h3>
+<div class="outline-text-3" id="text-org333162a">
+<p>
+The <code>stack</code> program is a combination of a build system and a package manager.  You will use this most of the time.
+</p>
+
+<ul class="org-ul">
+<li><code>stack repl</code> will start <code>ghci</code> for you, and automatically load any files that are in the project in the current
+directory.  This is how you will interact with the code for your machine problems.</li>
+
+<li><code>stack test</code> will run the provided test cases against your code.  Some of the tests are unit tests, but we are slowly
+replacing them with randomized specification-based tests.</li>
+
+<li>There are many other commands; run <code>stack help</code> to look at them and see what kinds of things are possible.</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+We will use Linux for our command line examples, but we try to be OS agnostic in the course.  The <code>$</code> will be the
+command line prompt.  Whatever system you use, as CS students you should absolutely be comfortable using the command
+line.
+</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="author">Author: Mattox Beckman</p>
+<p class="date">Created: 2022-07-12 Tue 10:21</p>
+</div>
+</body>
+</html>

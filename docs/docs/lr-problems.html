@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-07-12 Tue 10:17 -->
+<!-- 2022-04-22 Fri 15:02 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Programming Languages</title>
+<title>Test</title>
 <meta name="author" content="Mattox Beckman" />
 <meta name="generator" content="Org Mode" />
 <style>
@@ -194,26 +194,110 @@
   .org-svg { width: 90%; }
 </style>
 <link rel="stylesheet" href="css/tufte.css" type="text/css" />
+<script type="text/javascript" src="itemSets/moo.js"></script>
+<script type="text/javascript" src="itemSets/nearley.js"></script>
+<script type="text/javascript" src="itemSets/itemSetParserEx.js"></script>
+<script type="text/javascript" src="itemSets/latexifyItemSet.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Programming Languages</h1>
+<h1 class="title">Test
+<br />
+<span class="subtitle">Getting references to work for once!</span>
+</h1>
+<p>
+\(~\)
+</p>
 
-<div id="outline-container-org7b3e2e7" class="outline-2">
-<h2 id="org7b3e2e7"><span class="section-number-2">1.</span> Chapters</h2>
-<div class="outline-text-2" id="text-1">
-<ul class="org-ul">
-<li><a href="haskell.html">Haskell</a></li>
-<li><a href="tail-recursion.html">Tail Recursion</a></li>
-<li><a href="continuation-passing-style.html">Continuation-Passing Style</a></li>
-<li><a href="lr-problems.html">LR Problems</a></li>
-</ul>
+<p>
+We read this before. [<a href="#citeproc_bib_item_1">Danvy and Goldberg 2002</a>]
+</p>
+
+<p>
+I <span class="sc">Wonder</span> if we have a bibliography section?
+Now let&rsquo;s add a new line.
+</p>
+
+<p>
+Oh!  I guess it will work after all!
+</p>
+
+<p>
+Here is an item set.
+</p>
+
+
+<span id="bar_contents"></span>
+<span id="error">Errors will show up here.</span>
+<span id="text">Text will show up here.</span>
+<script>
+code = "I0. G -> . a G { a: s1} \n \
+        I1. G -> a . G { G: g2} \n \
+            G -> . a G { a: s1} \n \
+        I2. G -> a G . { $: r1}";
+
+var contents;
+var error;
+var text;
+var latstr;
+$(document).ready(function() {
+  var contents = document.getElementById("bar_contents");
+  var error = document.getElementById("error");
+  var text = document.getElementById("text");
+  const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+  try {
+     parser.feed(code);
+     //parser.feed(sol_x);
+     results = parser.results[0];
+     strResult = dataToString(results);
+     latstr = MathJax.tex2svg(latexifyItemSet(strResult));
+     contents.appendChild(latstr);
+     // error.innerHtml = latstr;
+
+  } catch (err) {
+   error.innerHTML = '<p>Yikes</p><pre>' + err.toString() + '</pre>';
+  }
+});
+</script>
+
+<p>
+No more!
+</p>
+
+<div id="outline-container-org097a65a" class="outline-2">
+<h2 id="org097a65a">References</h2>
+<div class="outline-text-2" id="text-org097a65a">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a><span style="font-variant:small-caps;">Danvy, O. and Goldberg, M.</span> 2002. <a href="https://doi.org/10.1145/581478.581500">There and back again</a>. <i>Proceedings of the seventh acm sigplan international conference on functional programming</i>, Association for Computing Machinery, 230–234.</div>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Mattox Beckman</p>
-<p class="date">Created: 2022-07-12 Tue 10:17</p>
+<p class="date">Created: 2022-04-22 Fri 15:02</p>
 </div>
 </body>
 </html>
