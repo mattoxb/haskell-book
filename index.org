@@ -1,0 +1,15 @@
+#+TITLE: Programming Languages
+#+AUTHOR: Mattox Beckman
+#+PRINT-DATE: February 2022
+#+COPYRIGHT-DATE: 2022
+#+WEB-SITE: http://www.tsdye.com
+#+MARGIN-NOTE-FONT: \itshape\footnotesize
+#+LATEX_CLASS: tufte-book
+#+HTML_HEAD: <link rel="stylesheet" href="css/tufte.css" type="text/css" />
+#+OPTIONS: toc:nil
+
+** Chapters
+ - [[file:haskell.org][Haskell]]
+ - [[file:tail-recursion.org][Tail Recursion]]
+ - [[file:continuation-passing-style.org][Continuation-Passing Style]]
+ - [[file:lr-problems.org][LR Problems]]
