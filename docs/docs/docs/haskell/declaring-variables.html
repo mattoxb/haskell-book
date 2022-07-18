@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-07-12 Tue 10:46 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Variable Declarations and Types</title>
+<meta name="author" content="Mattox Beckman" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="stylesheet" href="../css/tufte.css" type="text/css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Variable Declarations and Types
+<br />
+<span class="subtitle">The Beginnings</span>
+</h1>
+
+<div id="outline-container-org049e18d" class="outline-2">
+<h2 id="org049e18d">Objectives</h2>
+<div class="outline-text-2" id="text-org049e18d">
+<p>
+When you are done with this chapter, you will&#x2026;
+</p>
+
+<ul class="org-ul">
+<li>Declare and initialize variables in a file and in the REPL,</li>
+<li>Use type declarations to tell the compiler what type a value should be,</li>
+<li>Explain the difference between a type and a type constraint,</li>
+<li>Declare values of the following types:
+<ul class="org-ul">
+<li><code>Int</code> and <code>Integer</code></li>
+<li><code>Bool</code></li>
+<li><code>Double</code></li>
+<li><code>Char</code> and <code>String</code></li>
+<li><code>Lists</code></li>
+</ul></li>
+<li>and use type inference to avoid declaring types (and explain why you might not want to).</li>
+</ul>
+
+<p>
+We will look at functions in the next chapter.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0172651" class="outline-2">
+<h2 id="org0172651">Prerequisites</h2>
+<div class="outline-text-2" id="text-org0172651">
+<ul class="org-ul">
+<li>You should have installed <span class="sc">Haskell</span> on your own computer or have access to it online.</li>
+<li>You should be able to use the REPL as well as load definitions from a file.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4748502" class="outline-2">
+<h2 id="org4748502">First Declarations</h2>
+<div class="outline-text-2" id="text-org4748502">
+<p>
+Create a file <code>vars.hs</code> with the following lines in it.
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">jpn</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Int</span>
+<span style="color: #c678dd;">jpn</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">8675309</span>
+
+<span style="color: #c678dd;">answer</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Integer</span>
+<span style="color: #c678dd;">answer</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">42</span>
+
+<span style="color: #c678dd;">somePi</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Double</span>
+<span style="color: #c678dd;">somePi</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">3.14159</span>
+
+<span style="color: #c678dd;">status</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Bool</span>
+<span style="color: #c678dd;">status</span> <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">True</span>
+
+<span style="color: #c678dd;">zero</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Char</span>
+<span style="color: #c678dd;">zero</span> <span style="color: #dcaeea;">=</span> <span style="color: #98be65;">'0'</span>
+</code></pre>
+
+<p>
+This code declares and defines five variables. You&rsquo;ll notice that there are two lines for each; the first line declares
+the <i>type</i>, and the second line declares the <i>value</i>. The value declaration must follow immediately after the type
+declaration. It turns out that in <span class="sc">Haskell</span> is really two languages. The &ldquo;main&rdquo; language is the language for
+talking about expressions, and is what people usually mean when they say the word <span class="sc">Haskell</span>. The second
+language is the type language. Most people only use the simpler aspects of it to declare the types of variables and
+functions, but in fact the type language is also Turing Complete. <label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle"/><span class="sidenote">
+There is a famous (?) blog post <a href="https://aphyr.com/posts/342-typing-the-technical-interview">Typing the Technical Interview</a>
+in which the protagonist solves the 8-queens problem using <span class="sc">Haskell</span>&rsquo;s type language.
+It looks a little like <span class="sc">Prolog</span>.
+</span>
+</p>
+
+<p>
+The first variable is named <code>jpn</code> and has type <code>Int</code>. The type <code>Int</code> represents 32-bit machine-integers.
+</p>
+
+<p>
+The second variable is named <code>answer</code> and has type <code>Integer</code>.  The type <code>Integer</code> represents the integers you see in Mathematics.
+They are not bounded by a set number of bits; they are bound only by the amount of memory you have.  Some languages call these <i>BigInts</i>,
+and you may have used them in languages such as <span class="sc">Python</span> or <span class="sc">Java</span>.
+</p>
+
+<p>
+There is also <code>status</code> of Boolean type (note that <code>True</code> and <code>False</code> in this language are capitalized), and <code>zero</code>, a single character.
+Characters are enclosed in single quotes.
+</p>
+
+<p>
+Now you can start up a REPL and interact with the variables.  In the code below, the <code>Prelude&gt;</code> and <code>*Main&gt;</code> lines are prompts.
+The text before it tells you what modules are loaded.  We did not declare a module in the file, so <span class="sc">Haskell</span> made
+one by default.  You can hit Control-D to exit.
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>l vars
+[<span style="color: #da8548; font-weight: bold;">1</span> <span style="color: #51afef;">of</span> <span style="color: #da8548; font-weight: bold;">1</span>] <span style="color: #ECBE7B;">Compiling</span> <span style="color: #ECBE7B;">Main</span>             ( vars<span style="color: #dcaeea;">.</span>hs, interpreted )
+<span style="color: #ECBE7B;">Ok</span>, one <span style="color: #51afef;">module</span> loaded<span style="color: #dcaeea;">.</span>
+<span style="color: #dcaeea;">*</span><span style="color: #ECBE7B;">Main</span><span style="color: #dcaeea;">&gt;</span> status
+<span style="color: #ECBE7B;">True</span>
+<span style="color: #dcaeea;">*</span><span style="color: #ECBE7B;">Main</span><span style="color: #dcaeea;">&gt;</span> foo <span style="color: #dcaeea;">=</span> answer <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #dcaeea;">*</span><span style="color: #ECBE7B;">Main</span><span style="color: #dcaeea;">&gt;</span> foo
+<span style="color: #da8548; font-weight: bold;">43</span>
+<span style="color: #dcaeea;">*</span><span style="color: #ECBE7B;">Main</span><span style="color: #dcaeea;">&gt;</span> <span style="color: #ECBE7B;">:</span>t foo
+<span style="color: #c678dd;">foo</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Integer</span>
+</code></pre>
+
+<p>
+In the above sample run, we create a new variable in the REPL named <code>foo</code> that is equal to <code>answer + 1</code>, or 43.  Notice
+we did not have a type declaration like in the <code>vars.hs</code> file.  <span class="sc">Haskell</span> has automatic type inference, so
+it is able to determine the type of an expression by context.  It is in fact possible to write an entire program without
+these type annotations, but unless you are writing a &ldquo;throwaway&rdquo; script it is better that you leave the type annotations
+in, for two reasons: first, the annotations tell the compiler what you intended to do and allow it to detect any errors
+more quickly and give better error messages; second, the annotation also serves as documentation so you will know what
+you were thinking when you read the code again in a few years.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org748493d" class="outline-2">
+<h2 id="org748493d">Lists and Strings</h2>
+<div class="outline-text-2" id="text-org748493d">
+<p>
+One data structure you will see all the time in <span class="sc">Haskell</span> is the list.  One way to create them is to write out
+the elements between square brackets.  It will look like an array from other languages like <span class="sc">Python</span>, but in fact
+they are singly linked lists.
+</p>
+
+<pre class="code"><code><span style="color: #dcaeea;">*</span><span style="color: #ECBE7B;">Main</span><span style="color: #dcaeea;">&gt;</span> xx <span style="color: #dcaeea;">=</span> [foo,<span style="color: #da8548; font-weight: bold;">3</span>,<span style="color: #da8548; font-weight: bold;">4</span>]
+<span style="color: #dcaeea;">*</span><span style="color: #ECBE7B;">Main</span><span style="color: #dcaeea;">&gt;</span> <span style="color: #ECBE7B;">:</span>t xx
+<span style="color: #c678dd;">xx</span> <span style="color: #dcaeea;">::</span> [<span style="color: #ECBE7B;">Integer</span>]
+</code></pre>
+
+<p>
+Notice that type also is within square brackets; we read this as &ldquo;a list of integers.&rdquo;  A list in <span class="sc">Haskell</span> has to
+be <i>monomorphic</i>, that is, the contents must all be of the same type.  A list like <code>[10,"hi",True]</code> would not be allowed.  We
+will say more about lists in a future chapter, but we need to mention it now because the default representation of strings in
+<span class="sc">Haskell</span> is a list of characters.
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> greeting <span style="color: #dcaeea;">=</span> <span style="color: #98be65;">"Hello, world!"</span>
+<span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t greeting
+<span style="color: #c678dd;">greeting</span> <span style="color: #dcaeea;">::</span> [<span style="color: #ECBE7B;">Char</span>]
+</code></pre>
+
+<p>
+If you are writing out type declarations, the type <code>String</code> is a synonym for <code>[Char]</code>.  Haskell has several other, more efficient
+representations for strings, but we will not need them in this course.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc164cc2" class="outline-2">
+<h2 id="orgc164cc2">Type Variables and Constraints</h2>
+<div class="outline-text-2" id="text-orgc164cc2">
+<p>
+What do you think is the type of an empty list?
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> xx <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">[]</span>
+<span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t xx
+<span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">::</span> [a]
+</code></pre>
+
+<p>
+Type type <code>a</code> is a <i>type variable</i>.  The type <code>[a]</code> means &ldquo;a list of anything&rdquo;.  You will see type variables a lot, especially when
+you work with container types or polymorphic functions.
+</p>
+
+<p>
+Sometimes you want a type of data that has certain operations available, but you don&rsquo;t care about the specific type.  For example,
+you might want something that is a number, but you don&rsquo;t care if it&rsquo;s an <code>Int</code>, <code>Integer</code>, or <code>Float</code>.  Consider this code:
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> x <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">10</span>
+<span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t x
+<span style="color: #c678dd;">x</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Num</span> p <span style="color: #dcaeea;">=&gt;</span> p
+<span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> y <span style="color: #dcaeea;">=</span> [<span style="color: #da8548; font-weight: bold;">10</span>,<span style="color: #da8548; font-weight: bold;">30</span>]
+<span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t y
+<span style="color: #c678dd;">y</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Num</span> a <span style="color: #dcaeea;">=&gt;</span> [a]
+</code></pre>
+
+<p>
+The type <code>Num p =&gt; p</code> indicates that type <code>p</code> belongs to a <i>type class</i> <code>Num</code>.<label for="2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="2" class="margin-toggle"/><span class="sidenote">
+We refer to these as <i>type classes</i>, or just <i>classes</i> for short, but they are not classes in the object oriented
+language sense of the word; it is more like a &ldquo;classification&rdquo;.
+</span>  The <code>Num p</code> part is called a <i>type
+constraint</i>, and is similar to interfaces in languages like <span class="sc">Java</span>.  In this case it says that type <code>p</code> must
+be in the class <code>Num</code>.  For the variable <code>y</code> the constraint is <code>Num a</code> and the type is <code>[a]</code>, meaning the list can be
+considered any type that is numeric.
+</p>
+
+<p>
+There are many different type constraints available in <span class="sc">Haskell</span>, and you will be writing them yourself in this course.
+</p>
+
+<p>
+In the <span class="sc">Repl</span> you can use <code>:info Num</code> to see what operations are available for the <code>Num</code> class.  It&rsquo;s a good way to
+discover functionality you might not have guessed.
+</p>
+
+
+
+<p>
+*
+</p>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+There is a famous (?) blog post <a href="https://aphyr.com/posts/342-typing-the-technical-interview">Typing the Technical Interview</a>
+in which the protagonist solves the 8-queens problem using <span class="sc">Haskell</span>&rsquo;s type language.
+It looks a little like <span class="sc">Prolog</span>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+We refer to these as <i>type classes</i>, or just <i>classes</i> for short, but they are not classes in the object oriented
+language sense of the word; it is more like a &ldquo;classification&rdquo;.
+</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="author">Author: Mattox Beckman</p>
+<p class="date">Created: 2022-07-12 Tue 10:46</p>
+</div>
+</body>
+</html>

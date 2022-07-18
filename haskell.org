@@ -1,0 +1,38 @@
+#+TITLE: Haskell
+#+SUBTITLE: A Programming Language for Programming Languages
+#+AUTHOR: Mattox Beckman
+#+PRINT-DATE: May 2022
+#+COPYRIGHT-DATE: 2022
+#+bind: org-export-publishing-directory "./docs"
+#+WEB-SITE: http://mattoxb.github.io/haskell-book
+#+MARGIN-NOTE-FONT: \itshape\footnotesize
+#+LATEX_CLASS: tufte-book
+#+HTML_HEAD: <link rel="stylesheet" href="css/tufte.css" type="text/css" />
+#+COMMENT: HTML_HEAD: <script type="text/javascript" src="https://livejs.com/live.js"></script>
+#+OPTIONS: toc:nil num:nil
+#+BIBLIOGRAPHY: cs.bib
+#+cite_export: csl acm-siggraph.csl
+
+We will discuss many languages in this course, but we will use [[class:sc][Haskell]] when we decide to implement a language or explain
+a language feature.  As a result, you will need to learn some [[class:sc][Haskell]].  If you want a comprehensive introduction to the
+language[fn:well] you might want to look at [[http://learnyouahaskell.com][Learn You a Haskell for Great Good]].
+
+In this text, we will cover only the bits of [[class:sc][Haskell]] you need to do the work in this course, which should make this a faster
+introduction than others.
+
+
+* Sections
+
+- [[file:haskell/installation.org][Installation]]
+- [[file:haskell/declaring-variables.org][Declaring Variables]]
+- [[file:haskell/functions.org][Functions]]
+- [[file:haskell/higher-order-functions.org][Higher Order Functions]]
+- [[file:haskell/disjoint-types.org][Disjoint Types]]
+
+[fn:well] Well, reasonably comprehensive anyway; there are a lot of extensions and advanced features that you learn about through
+research papers and blogs.
+
+* End :noexport:
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook  #'org-tufte-export-to-file nil t)
+;; End:

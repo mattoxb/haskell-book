@@ -2,7 +2,8 @@
 #+AUTHOR: Mattox Beckman
 #+PRINT-DATE: February 2022
 #+COPYRIGHT-DATE: 2022
-#+WEB-SITE: http://www.tsdye.com
+#+bind: org-export-publishing-directory "./docs"
+#+WEB-SITE: http://mattoxb.github.io/haskell-book
 #+MARGIN-NOTE-FONT: \itshape\footnotesize
 #+LATEX_CLASS: tufte-book
 #+HTML_HEAD: <link rel="stylesheet" href="css/tufte.css" type="text/css" />

@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-07-18 Mon 16:39 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Functions</title>
+<meta name="author" content="Mattox Beckman" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="stylesheet" href="../css/tufte.css" type="text/css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Functions
+<br />
+<span class="subtitle">This is a functional language, after all!</span>
+</h1>
+
+<div id="outline-container-orge2e7dca" class="outline-2">
+<h2 id="orge2e7dca">Objectives</h2>
+<div class="outline-text-2" id="text-orge2e7dca">
+<p>
+When you are done with this chapter, you will&#x2026;.
+</p>
+
+<ul class="org-ul">
+<li>Be able to declare functions of one or multiple variables,</li>
+<li>Explain the types of functions,</li>
+<li>Use currying to partially apply functions,</li>
+<li>Use pattern patching to work with lists.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org5a7d267" class="outline-2">
+<h2 id="org5a7d267">Function declarations</h2>
+<div class="outline-text-2" id="text-org5a7d267">
+<p>
+Let&rsquo;s get started with this function declaration:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">inc</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Integer</span> <span style="color: #dcaeea;">-&gt;</span> <span style="color: #ECBE7B;">Integer</span>
+<span style="color: #c678dd;">inc</span> a <span style="color: #dcaeea;">=</span> a <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">1</span>
+
+<span style="color: #c678dd;">plus</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Integer</span> <span style="color: #dcaeea;">-&gt;</span> <span style="color: #ECBE7B;">Integer</span> <span style="color: #dcaeea;">-&gt;</span> <span style="color: #ECBE7B;">Integer</span>
+<span style="color: #c678dd;">plus</span> a b <span style="color: #dcaeea;">=</span> a <span style="color: #dcaeea;">+</span> b
+</code></pre>
+
+<p>
+The first function <code>inc</code> (short for <i>increment</i>)takes one parameter <code>a</code> and returns <code>a + 1</code>.  The type is
+<code>Integer -&gt; Integer</code>, which means if you give an integer to <code>inc</code> it will return one back.
+</p>
+
+<p>
+The function <code>plus</code> has two parameters, <code>a</code> and <code>b</code>.  The type indicates that if you give two integer arguments to
+it you will get an integer back.
+</p>
+
+<p>
+To call a function, you use juxtaposition:
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> inc <span style="color: #da8548; font-weight: bold;">10</span>
+<span style="color: #da8548; font-weight: bold;">11</span>
+<span style="color: #ECBE7B;">Main</span><span style="color: #c678dd;">&gt;</span> plus <span style="color: #da8548; font-weight: bold;">10</span> <span style="color: #da8548; font-weight: bold;">32</span>
+<span style="color: #da8548; font-weight: bold;">42</span>
+</code></pre>
+
+<p>
+Some useful vocab words:
+</p>
+<ul class="org-ul">
+<li>the variables <code>a</code> and <code>b</code> here are called <i>parameters</i>.</li>
+<li>The expressions 10 and 32 are called <i>arguments</i>.  Many people use these two terms interchangeably but we will keep them distinct here.</li>
+<li>The expression <code>a + 1</code> is the <i>body of the function</i> <code>inc</code>, likewise <code>a + b</code> is the body of <code>plus</code>.</li>
+</ul>
+
+<p>
+Function application has the highest precedence of any operation in <span class="sc">Haskell</span>.
+Usually this makes the code very concise.  For example, you can say <code>inc 10 * plus 30 2</code> and get <code>320</code> as a result.
+You can use parenthesis to enforce a different grouping, such as <code>inc (10 + 3)</code> to get <code>14</code>.
+</p>
+
+<div class="alert" id="org2f03d72">
+<p>
+Don&rsquo;t get into the habit of putting unnecessary parenthesis around function parameters.  You can write <code>inc(10)</code> and it will work,
+but everyone who sees it will think you&rsquo;re a noob.
+</p>
+
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orga721d73" class="outline-2">
+<h2 id="orga721d73">Currying</h2>
+<div class="outline-text-2" id="text-orga721d73">
+<p>
+Look at the type of <code>plus</code> again.  We said it takes two integers and returns an integer, but it&rsquo;s a bit more complicated than that.
+You can also think of the type <code>Integer -&gt; Integer -&gt; Integer</code> as saying that if you give it a single integer, you will get back a function
+of type <code>Integer -&gt; Integer</code>.
+</p>
+
+<p>
+For example, we could have defined <code>inc</code> this way:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">inc</span> <span style="color: #dcaeea;">=</span> plus <span style="color: #da8548; font-weight: bold;">1</span>
+</code></pre>
+
+<p>
+This style of function application is called <i>currying</i>, named after the logician <a href="https://en.wikipedia.org/wiki/Haskell_Curry"><i>Haskell Curry</i></a>.
+If you become a logician, maybe someday they will name a language after you too.
+</p>
+
+<p>
+This brings up an important concept: functions can return other functions in this language.  We will talk more about that in the chapter on
+<a href="higher-order-functions.html">Higher Order Functions</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org785528e" class="outline-2">
+<h2 id="org785528e">Pattern Matching</h2>
+<div class="outline-text-2" id="text-org785528e">
+<p>
+<span class="sc">Haskell</span> functions allow you to specify patterns in the parameter list.  Here&rsquo;s a weird example.
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">foo</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Integer</span> <span style="color: #dcaeea;">-&gt;</span> <span style="color: #ECBE7B;">Integer</span> <span style="color: #dcaeea;">-&gt;</span> <span style="color: #ECBE7B;">Integer</span>
+<span style="color: #c678dd;">foo</span> <span style="color: #da8548; font-weight: bold;">1</span> n <span style="color: #dcaeea;">=</span> n <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">foo</span> <span style="color: #da8548; font-weight: bold;">2</span> n <span style="color: #dcaeea;">=</span> n <span style="color: #dcaeea;">*</span> <span style="color: #da8548; font-weight: bold;">2</span>
+<span style="color: #c678dd;">foo</span> <span style="color: #da8548; font-weight: bold;">3</span> n <span style="color: #dcaeea;">=</span> n <span style="color: #dcaeea;">*</span> n
+<span style="color: #c678dd;">foo</span> <span style="color: #51afef;">_</span> n <span style="color: #dcaeea;">=</span> n
+</code></pre>
+
+<p>
+The function <code>foo</code> has four separate &ldquo;versions&rdquo;.  So, <code>foo 1 10</code> will return 11, <code>foo 2 10</code> will return 20, <code>foo 3 10</code> will return 100, and <code>foo 5 10</code> (or any other
+number but 1,2, or 3 in the first position) will return 10.  The underscore character means that <code>foo</code> is going to ignore the input in that position.  If there is more
+than one pattern that could match the input, the first one in the list wins.  If you wrote <code>foo _ n = n</code> before the other patterns, none of the others would ever
+get called. The compiler will usually warn you if a pattern is unreachable.
+</p>
+
+<p>
+<span class="sc">Haskell</span> programmers tend to use patterns whenever possible.  Here, for comparison, are three different ways to write the factorial function:
+</p>
+
+<p>
+This first way is the most common form, but be careful not to call it on a negative number or you&rsquo;ll get
+<a href="https://en.wikipedia.org/wiki/Turtles_all_the_way_down">turtles all the way down</a>!
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">fact</span> <span style="color: #da8548; font-weight: bold;">0</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">fact</span> n <span style="color: #dcaeea;">=</span> n <span style="color: #dcaeea;">*</span> fact (n<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>)
+</code></pre>
+
+<p>
+People who are new to <span class="sc">Haskell</span> but know other languages such as C++ will tend to write the function this way:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">fact</span> n <span style="color: #dcaeea;">=</span>
+   <span style="color: #51afef;">if</span> n <span style="color: #dcaeea;">==</span> <span style="color: #da8548; font-weight: bold;">0</span>
+      <span style="color: #51afef;">then</span> <span style="color: #da8548; font-weight: bold;">1</span>
+      <span style="color: #51afef;">else</span> n <span style="color: #dcaeea;">*</span> fact (n<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>)
+</code></pre>
+
+<p>
+There&rsquo;s nothing technically wrong with this code, but it less concise and considered unidomatic.
+</p>
+
+<p>
+There is one other option you have: the pattern guard.
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">fact</span> n <span style="color: #dcaeea;">|</span> n <span style="color: #dcaeea;">==</span> <span style="color: #da8548; font-weight: bold;">0</span>    <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+       <span style="color: #dcaeea;">|</span> otherwise <span style="color: #dcaeea;">=</span> n <span style="color: #dcaeea;">*</span> fact (n<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>)
+</code></pre>
+
+<p>
+You can put the <code>|</code> symbol after the parameter list and give a boolean expression.  If this expression is true, then the
+pattern is considered a match and the corresponding function body runs.  As before, patterns are tried from top to bottom.
+The pattern <code>otherwise</code> matches anything and is actually defined as <code>otherwise = True</code>.
+</p>
+
+<p>
+You will use pattern matching heavily in this course, especially once we introduce disjoint types.
+One disjoint type you have already seen is the list.  A list has two forms: an empty list and a list with data in it.
+The pattern for an empty list is <code>[]</code>, and the pattern for a non-empty list is <code>x:y</code>, where <code>x</code> is the first element of a list
+and <code>y</code> is a reference to the rest of the list.  The <code>:</code> pattern is right-associative.  To to create the list 1,2,3, you could write
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">m</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span> <span style="color: #ECBE7B;">:</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #ECBE7B;">:</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #ECBE7B;">:</span> <span style="color: #ECBE7B;">[]</span>
+</code></pre>
+
+<p>
+or also
+</p>
+<pre class="code"><code><span style="color: #c678dd;">m</span> <span style="color: #dcaeea;">=</span> [<span style="color: #da8548; font-weight: bold;">1</span>,<span style="color: #da8548; font-weight: bold;">2</span>,<span style="color: #da8548; font-weight: bold;">3</span>]
+</code></pre>
+
+<p>
+Here are a couple of functions that work on lists.
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">length</span> <span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">0</span>
+<span style="color: #c678dd;">length</span> (x<span style="color: #ECBE7B;">:</span>xs) <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span> <span style="color: #dcaeea;">+</span> length xs
+
+<span style="color: #c678dd;">sum</span> <span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">0</span>
+<span style="color: #c678dd;">sum</span> (x<span style="color: #ECBE7B;">:</span>xs) <span style="color: #dcaeea;">=</span> x <span style="color: #dcaeea;">+</span> sum xs
+</code></pre>
+
+<p>
+Functions that work on list will almost always use variable names like <code>x:xs</code>, where the second variable is the same as
+the first but with an <code>s</code> added.  This is a naming convention, and since it is almost universally followed you should
+probably follow it too, but you could use other names if you wanted, like <code>first:rest</code>.
+</p>
+
+<p>
+Another thing to watch out for is that the <code>x:xs</code> needs to be in parenthesis since function application binds more tightly
+than <code>:</code> does.
+</p>
+
+<p>
+The <code>:</code> can be &ldquo;stacked&rdquo; if you need to.  For example, this function takes each two elements and adds them together:
+<code>foo [10,20,30,40]</code> yields <code>[30,70]</code>
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">foo</span> <span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">[]</span>
+<span style="color: #c678dd;">foo</span> (a<span style="color: #ECBE7B;">:</span>b<span style="color: #ECBE7B;">:</span>c) <span style="color: #dcaeea;">=</span> a<span style="color: #dcaeea;">+</span>b <span style="color: #ECBE7B;">:</span> foo c
+</code></pre>
+
+<p>
+Note that this function is partial!  If you call it on a list with an odd number of elements you will get an error message
+<code>Non-exhaustive patterns in function foo</code>.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orge8c4547" class="outline-2">
+<h2 id="orge8c4547">Defining Operators</h2>
+<div class="outline-text-2" id="text-orge8c4547">
+<p>
+You can define operators in this language.  Here is the definition of the list append function:
+</p>
+
+<pre class="code"><code>(<span style="color: #c678dd;">++</span>) <span style="color: #dcaeea;">::</span> [a] <span style="color: #dcaeea;">-&gt;</span> [a] <span style="color: #dcaeea;">-&gt;</span> [a]
+(<span style="color: #c678dd;">++</span>) <span style="color: #ECBE7B;">[]</span> yy <span style="color: #dcaeea;">=</span> yy
+(<span style="color: #c678dd;">++</span>) (x<span style="color: #ECBE7B;">:</span>xs) yy <span style="color: #dcaeea;">=</span> x <span style="color: #ECBE7B;">:</span> (xs <span style="color: #dcaeea;">++</span> yy)
+</code></pre>
+
+<p>
+You can also write the definition in infix form, but it is sometimes harder to read:
+</p>
+
+<pre class="code"><code>(<span style="color: #c678dd;">++</span>) <span style="color: #dcaeea;">::</span> [a] <span style="color: #dcaeea;">-&gt;</span> [a] <span style="color: #dcaeea;">-&gt;</span> [a]
+<span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">++</span> yy <span style="color: #dcaeea;">=</span> yy
+(x<span style="color: #ECBE7B;">:</span>xs) <span style="color: #dcaeea;">++</span> yy <span style="color: #dcaeea;">=</span> x <span style="color: #ECBE7B;">:</span> (xs <span style="color: #dcaeea;">++</span> yy)
+</code></pre>
+
+<p>
+In general, putting parenthesis around any operator makes it behave like a typical function.
+</p>
+
+<p>
+You can also but backquotes around a function name to make it infix.  So you can write <code>10 `plus` 20</code> to get 30 if you want.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2c1ea39" class="outline-2">
+<h2 id="org2c1ea39">Exercises</h2>
+<div class="outline-text-2" id="text-org2c1ea39">
+<ol class="org-ol">
+<li>Write a function <code>product</code> that multiplies all the elements of a list together.  Be careful about your base case!</li>
+</ol>
+
+<details> <summary> Reveal Solution </summary>
+<pre class="code"><code><span style="color: #c678dd;">product</span> <span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">product</span> (x<span style="color: #ECBE7B;">:</span>xs) <span style="color: #dcaeea;">=</span> x <span style="color: #dcaeea;">*</span> product xs
+</code></pre>
+</details>
+
+<ol class="org-ol">
+<li>Write a function <code>power n x</code> that takes the nth power of \(x\).</li>
+</ol>
+
+<details> <summary> Reveal Solution </summary>
+<pre class="code"><code><span style="color: #c678dd;">power</span> <span style="color: #da8548; font-weight: bold;">0</span> x <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">power</span> n x <span style="color: #dcaeea;">=</span> x <span style="color: #dcaeea;">*</span> power (n<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>)
+</code></pre>
+
+<p>
+You can make it more efficient:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">power</span> <span style="color: #da8548; font-weight: bold;">0</span> x <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">power</span> n x <span style="color: #dcaeea;">|</span> x <span style="color: #dcaeea;">%</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">==</span> <span style="color: #da8548; font-weight: bold;">0</span> <span style="color: #dcaeea;">=</span> power (n<span style="color: #dcaeea;">/</span><span style="color: #da8548; font-weight: bold;">2</span>) (x<span style="color: #dcaeea;">*</span>x)
+          <span style="color: #dcaeea;">|</span> otherwise  <span style="color: #dcaeea;">=</span> n <span style="color: #dcaeea;">*</span> power (n<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>) x
+</code></pre>
+</details>
+
+<ol class="org-ol">
+<li>Write a function <code>minList</code> that returns the minimum element of a list.
+Assume the list has at least one element.  There is a built-in function <code>min</code> that will help.</li>
+</ol>
+
+<details> <summary> Reveal Solution </summary>
+<pre class="code"><code><span style="color: #c678dd;">minList</span> [x] <span style="color: #dcaeea;">=</span> x
+<span style="color: #c678dd;">minList</span> (x<span style="color: #ECBE7B;">:</span>xs) <span style="color: #dcaeea;">=</span> min x (minList xs)
+</code></pre>
+
+<p>
+If you let <span class="sc">Haskell</span> infer the type, you will see <code>minList :: Ord n =&gt; [n] -&gt; n</code>.  The <code>Ord</code>
+typeclass provides comparison operators.
+</p>
+</details>
+</div>
+
+<div id="outline-container-org7277838" class="outline-4">
+<h4 id="org7277838">References</h4>
+<div class="outline-text-4" id="text-org7277838">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Mattox Beckman</p>
+<p class="date">Created: 2022-07-18 Mon 16:39</p>
+</div>
+</body>
+</html>

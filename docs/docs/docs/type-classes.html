@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-03-19 Sat 12:42 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Type Classes</title>
+<meta name="author" content="Mattox Beckman" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="stylesheet" href="css/tufte.css" type="text/css" />
+<style>pre.src {background-color: #303030; color: #e5e5e5;}</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Type Classes
+<br />
+<span class="subtitle">Polymorphism the Easy Way</span>
+</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org4a964f6">Defining Type Classes</a>
+<ul>
+<li><a href="#orgfccc9c7">Type Classes</a></li>
+<li><a href="#orgcb73aef">Instances of Type Classes</a></li>
+</ul>
+</li>
+<li><a href="#orgf942da5">The Categorical Type Classes</a>
+<ul>
+<li><a href="#org4f69afb">Monoids</a></li>
+<li><a href="#orgcda04e8">Functors</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+In most languages we have operations that &ldquo;should&rdquo; be applicable to more than one type.  For example, addition should work with both integers and floating point.
+</p>
+
+<div id="outline-container-org4a964f6" class="outline-2">
+<h2 id="org4a964f6">Defining Type Classes</h2>
+<div class="outline-text-2" id="text-org4a964f6">
+</div>
+<div id="outline-container-orgfccc9c7" class="outline-3">
+<h3 id="orgfccc9c7">Type Classes</h3>
+<div class="outline-text-3" id="text-orgfccc9c7">
+<p>
+A type class defines a set of functions that can be implemented for more than one type.  A type class definition contains:
+</p>
+<ul class="org-ul">
+<li>the keyword <code>class</code></li>
+<li>an optional <i>constraint</i></li>
+<li>a <i>name</i></li>
+<li>a <i>target type variable</i></li>
+<li>the keyword <code>where</code></li>
+<li>a set of variable declarations (usually these are functions), possibly with default definitions</li>
+</ul>
+
+<p>
+Here is an example from the Haskell standard prelude:
+</p>
+
+<pre class="code"><code><span class="linenr">1: </span><span class="org-haskell-keyword">class</span> <span class="org-haskell-type">Eq</span> a <span class="org-haskell-keyword">where</span>
+<span class="linenr">2: </span>  (<span class="org-haskell-operator">==</span>) <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Bool</span>
+<span class="linenr">3: </span>  (<span class="org-haskell-operator">/=</span>) <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Bool</span>
+<span class="linenr">4: </span>
+<span class="linenr">5: </span>  x <span class="org-haskell-operator">==</span> y <span class="org-haskell-operator">=</span> not (x <span class="org-haskell-operator">/=</span> y)
+<span class="linenr">6: </span>  x <span class="org-haskell-operator">/=</span> y <span class="org-haskell-operator">=</span> not (x <span class="org-haskell-operator">==</span> y)
+</code></pre>
+
+<p>
+The type class is named <code>Eq</code> and provides equality checking for a type.  There are no constraints, and only two definitions: <code>==</code> and <code>/=</code>.  In many
+type class definitions we only provide the types of the associated functions, but in this case we also provide default definitions for them.
+Notice how they are mutually recursive.  Later on, we can specify an implementation of the <code>Eq</code> class by defining one of the two functions.
+</p>
+
+<p>
+Here is a more complex example.
+</p>
+
+<pre class="code"><code><span class="linenr"> 1: </span><span class="org-haskell-keyword">class</span>  (<span class="org-haskell-type">Eq</span> a) <span class="org-haskell-operator">=&gt;</span> <span class="org-haskell-type">Ord</span> a  <span class="org-haskell-keyword">where</span>
+<span class="linenr"> 2: </span>   compare               <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Ordering</span>
+<span class="linenr"> 3: </span>    (<span class="org-haskell-operator">&lt;</span>), (<span class="org-haskell-operator">&lt;=</span>), (<span class="org-haskell-operator">&gt;=</span>), (<span class="org-haskell-operator">&gt;</span>) <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> a <span class="org-haskell-operator">-&gt;</span> <span class="org-haskell-type">Bool</span>
+<span class="linenr"> 4: </span>    max, min             <span class="org-haskell-operator">::</span> a <span class="org-haskell-operator">-&gt;</span> a <span class="org-haskell-operator">-&gt;</span> a
+<span class="linenr"> 5: </span>
+<span class="linenr"> 6: </span>        <span class="org-comment-delimiter">-- </span><span class="org-comment">Minimal complete definition:</span>
+<span class="linenr"> 7: </span>        <span class="org-comment-delimiter">--      </span><span class="org-comment">(&lt;=) or compare</span>
+<span class="linenr"> 8: </span>        <span class="org-comment-delimiter">-- </span><span class="org-comment">Using compare can be more efficient for complex types.</span>
+<span class="linenr"> 9: </span>    compare x y
+<span class="linenr">10: </span>         <span class="org-haskell-operator">|</span> x <span class="org-haskell-operator">==</span> y    <span class="org-haskell-operator">=</span>  <span class="org-haskell-constructor">EQ</span>
+<span class="linenr">11: </span>         <span class="org-haskell-operator">|</span> x <span class="org-haskell-operator">&lt;=</span> y    <span class="org-haskell-operator">=</span>  <span class="org-haskell-constructor">LT</span>
+<span class="linenr">12: </span>         <span class="org-haskell-operator">|</span> otherwise <span class="org-haskell-operator">=</span>  <span class="org-haskell-constructor">GT</span>
+<span class="linenr">13: </span>
+<span class="linenr">14: </span>    x <span class="org-haskell-operator">&lt;=</span> y           <span class="org-haskell-operator">=</span>  compare x y <span class="org-haskell-operator">/=</span> <span class="org-haskell-constructor">GT</span>
+<span class="linenr">15: </span>    x <span class="org-haskell-operator">&lt;</span>  y           <span class="org-haskell-operator">=</span>  compare x y <span class="org-haskell-operator">==</span> <span class="org-haskell-constructor">LT</span>
+<span class="linenr">16: </span>    x <span class="org-haskell-operator">&gt;=</span> y           <span class="org-haskell-operator">=</span>  compare x y <span class="org-haskell-operator">/=</span> <span class="org-haskell-constructor">LT</span>
+<span class="linenr">17: </span>    x <span class="org-haskell-operator">&gt;</span>  y           <span class="org-haskell-operator">=</span>  compare x y <span class="org-haskell-operator">==</span> <span class="org-haskell-constructor">GT</span>
+<span class="linenr">18: </span>
+<span class="linenr">19: </span><span class="org-comment-delimiter">-- </span><span class="org-comment">note that (min x y, max x y) = (x,y) or (y,x)</span>
+<span class="linenr">20: </span>    max x y
+<span class="linenr">21: </span>         <span class="org-haskell-operator">|</span> x <span class="org-haskell-operator">&gt;=</span> y    <span class="org-haskell-operator">=</span>  x
+<span class="linenr">22: </span>         <span class="org-haskell-operator">|</span> otherwise <span class="org-haskell-operator">=</span>  y
+<span class="linenr">23: </span>    min x y
+<span class="linenr">24: </span>         <span class="org-haskell-operator">|</span> x <span class="org-haskell-operator">&lt;</span>  y    <span class="org-haskell-operator">=</span>  x
+<span class="linenr">25: </span>         <span class="org-haskell-operator">|</span> otherwise <span class="org-haskell-operator">=</span>  y
+</code></pre>
+
+<p>
+The name of this type-class is <code>Ord</code>.  The target type variable is <code>a</code>.  The <code>(Eq a)</code> part is the constraint; it says that for <code>a</code> to be an <code>Ord</code> it must first
+be an <code>Eq</code>.
+</p>
+
+<p>
+There are seven functions declared: <code>compare</code>, which returns an <code>Ordering</code> type, the four inequalities, and <code>min</code> and <code>max</code>.
+</p>
+
+<p>
+What comes next is interesting.  We have a definition of <code>compare</code> that uses <code>=</code> or <code>&lt;=</code>.  The four inequalities are then defined in terms
+of <code>compare</code>.  Equality is provided by the <code>Eq</code> type class.  Therefore the inequalities are mutually recursive with each other and with <code>compare</code>.  If you
+define <code>&lt;=</code>, you will get the definition of <code>compare</code> as a result.  Or, you could define <code>compare</code> and get the inequalities as a result.  This gives
+you two ways to complete the definition.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcb73aef" class="outline-3">
+<h3 id="orgcb73aef">Instances of Type Classes</h3>
+<div class="outline-text-3" id="text-orgcb73aef">
+<p>
+Let&rsquo;s suppose now we want to create a type called <code>Priority</code> that has three levels: <code>A</code>, <code>B</code>, and <code>C</code>, and be able to compare them using the operators from
+the <code>Ord</code> type class.  What we want to do is called <i>declaring and instance</i> of a type class.  The syntax is similar.  You will provide:
+</p>
+<ul class="org-ul">
+<li>the <code>instance</code> keyword</li>
+<li>the name of the typeclass and the name of your type</li>
+<li>the <code>where</code> keyword</li>
+<li>the required definitions</li>
+</ul>
+
+<p>
+Since the class <code>Eq</code> defines <code>=</code> and <code>/=</code> in terms of each other, you just need to provide one of them.
+</p>
+
+<pre class="code"><code><span class="linenr">1: </span><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Priority</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">A</span>
+<span class="linenr">2: </span>
+<span class="linenr">3: </span><span class="org-haskell-keyword">instance</span> <span class="org-haskell-type">Eq</span> <span class="org-haskell-type">Priority</span> <span class="org-haskell-keyword">where</span>
+<span class="linenr">4: </span>  <span class="org-haskell-constructor">A</span> <span class="org-haskell-operator">==</span> <span class="org-haskell-constructor">A</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">5: </span>  <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">==</span> <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">6: </span>  <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">==</span> <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">7: </span>  <span class="org-haskell-keyword">_</span> <span class="org-haskell-operator">==</span> <span class="org-haskell-keyword">_</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">False</span>
+</code></pre>
+
+<p>
+Definitions like this are painfully tedious, and the compiler can often figure out what the right thing is, so there is also a keyword <code>deriving</code>
+you can use when you declare the type:
+</p>
+
+<pre class="code"><code><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Priority</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">A</span>
+    <span class="org-haskell-keyword">deriving</span> (<span class="org-haskell-constructor">Eq</span>,<span class="org-haskell-constructor">Show</span>)
+</code></pre>
+
+<p>
+(The <code>Show</code> type class defines a function <code>show</code> that converts a type into a string.  You&rsquo;ve probably seen this quite a bit already.)
+</p>
+
+<p>
+Now for <code>Ord</code>, we use this definition:
+</p>
+
+<pre class="code"><code><span class="linenr">1: </span><span class="org-haskell-keyword">instance</span> <span class="org-haskell-type">Ord</span> <span class="org-haskell-type">Priority</span> <span class="org-haskell-keyword">where</span>
+<span class="linenr">2: </span>  <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">&lt;=</span> <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">3: </span>  <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">&lt;=</span> <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">4: </span>  <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">&lt;=</span> <span class="org-haskell-constructor">A</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">5: </span>  <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">&lt;=</span> <span class="org-haskell-constructor">A</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">6: </span>  <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">&lt;=</span> <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">7: </span>  <span class="org-haskell-constructor">A</span> <span class="org-haskell-operator">&lt;=</span> <span class="org-haskell-constructor">A</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">True</span>
+<span class="linenr">8: </span>  <span class="org-haskell-keyword">_</span> <span class="org-haskell-operator">&lt;=</span> <span class="org-haskell-keyword">_</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">False</span>
+</code></pre>
+
+<p>
+Also pretty tedious, but in real life we probably aren&rsquo;t going to define things like this very often.  You&rsquo;ll also be glad to hear that Haskell can
+derive <code>Ord</code> things for you as well.  The constructors declared earlier are considered &ldquo;smaller&rdquo; than the ones declared later.
+</p>
+
+<pre class="code"><code><span class="org-haskell-keyword">data</span> <span class="org-haskell-type">Priority</span> <span class="org-haskell-operator">=</span> <span class="org-haskell-constructor">C</span> <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">B</span> <span class="org-haskell-operator">|</span> <span class="org-haskell-constructor">A</span>
+    <span class="org-haskell-keyword">deriving</span> (<span class="org-haskell-constructor">Eq</span>,<span class="org-haskell-constructor">Ord</span>,<span class="org-haskell-constructor">Show</span>)
+</code></pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf942da5" class="outline-2">
+<h2 id="orgf942da5">The Categorical Type Classes</h2>
+<div class="outline-text-2" id="text-orgf942da5">
+<p>
+There are a few type classes that are inspired by constructs in Category Theory and other parts of mathematics.  You do
+<b>not</b> need to know any Category Theory to benefit from these, but you&rsquo;ll hear it brought up once in a while,
+particularly with the Monad type class.
+</p>
+</div>
+
+<div id="outline-container-org4f69afb" class="outline-3">
+<h3 id="org4f69afb">Monoids</h3>
+<div class="outline-text-3" id="text-org4f69afb">
+<p>
+A monoid is a type that has two properties:
+</p>
+<ul class="org-ul">
+<li>There is an operation that takes two elements of the type and returns another one.</li>
+<li>There is an &ldquo;identity element&rdquo; with respect to that operation.</li>
+</ul>
+
+<p>
+Monoids are everywhere.  Here are a few examples:
+</p>
+<ul class="org-ul">
+<li>Strings, with append being the operation and the empty string being the identity.</li>
+<li>Lists, with append and the empty list.</li>
+<li>Integers, with addition and zero.</li>
+<li>Also integers, but this time with multiplication and one.</li>
+</ul>
+
+<p>
+Monoids are especially useful if you happen to define a type that encodes configurations.  If the type is a monoid you will
+be able to compose them easily.
+</p>
+
+<p>
+The Monoid type class defines <code>mappend</code> as the name of the operation and <code>mempty</code> as the name of the identity.  Haskell provides
+monoid instances for many of the built-in types.  (Integers are a special case since there is more than one natural monoid definition
+for them.)
+</p>
+
+<p>
+There&rsquo;s a lot more detail to this type-class on the <a href="https://wiki.haskell.org/Monoid">Haskell Wiki</a> that you may find interesting.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcda04e8" class="outline-3">
+<h3 id="orgcda04e8">Functors</h3>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Mattox Beckman</p>
+<p class="date">Created: 2022-03-19 Sat 12:42</p>
+</div>
+</body>
+</html>
