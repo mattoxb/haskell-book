@@ -1,0 +1,14 @@
+* Haskell Book
+
+This will eventually be a textbook for my programming languages course.  I use Haskell for the implementation language, and students have asked for
+an introduction to the language that is more specific to the course.  This book will therefore cover the parts of Haskell that are useful for writing
+interpreters, and leave out a lot of things that you would find in books such as [[https://learnyouahaskell.org][Learn You a Haskell for Great Good]].
+
+This book will also cover other topics that are covered in the coures, many which have little to do with Haskell itself.
+
+** Status
+
+Some of these chapters are "historical" in that they were guides I wrote earlier that were not expected to be part of a textbook.  In particular, the
+sections on Lambda Calculus and Continuatioh Passing Style are here to help current students, but need to be rewritten.
+
+Feel free to follow the repository to get updates and open issues if you find something that should be fixed.
