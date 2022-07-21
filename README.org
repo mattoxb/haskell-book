@@ -2,7 +2,7 @@
 
 This will eventually be a textbook for my programming languages course.  I use Haskell for the implementation language, and students have asked for
 an introduction to the language that is more specific to the course.  This book will therefore cover the parts of Haskell that are useful for writing
-interpreters, and leave out a lot of things that you would find in books such as [[https://learnyouahaskell.org][Learn You a Haskell for Great Good]].
+interpreters, and leave out a lot of things that you would find in books such as [[http://learnyouahaskell.com/][Learn You a Haskell for Great Good]].
 
 This book will also cover other topics that are covered in the coures, many which have little to do with Haskell itself.
 
