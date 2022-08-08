@@ -12,5 +12,6 @@
 ** Chapters
  - [[file:haskell.org][Haskell]]
  - [[file:tail-recursion.org][Tail Recursion]]
- - [[file:continuation-passing-style.org][Continuation-Passing Style]]
- - [[file:lr-problems.org][LR Problems]]
+ - [[file:thanks.org][Thanks]]
+# - [[file:continuation-passing-style.org][Continuation-Passing Style]]
+# - [[file:lr-problems.org][LR Problems]]

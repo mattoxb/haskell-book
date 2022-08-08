@@ -1,0 +1,23 @@
+#+title: Thanks
+#+AUTHOR: Mattox Beckman
+#+PRINT-DATE: February 2022
+#+COPYRIGHT-DATE: 2022
+#+WEB-SITE: http://www.tsdye.com
+#+MARGIN-NOTE-FONT: \itshape\footnotesize
+#+LATEX_CLASS: tufte-book
+#+OPTIONS: toc:nil num:nil
+#+HTML_HEAD: <link rel="stylesheet" href="css/tufte.css" type="text/css" />
+
+* Thanks
+
+Thanks to the many readers who have corrected typos or made suggestions to improve the quality of the text.
+
+- Matt Brunton
+- Enguang Fan
+- Ruben Serrano
+
+
+* End :noexport:
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook  #'org-tufte-export-to-file nil t)
+;; End:

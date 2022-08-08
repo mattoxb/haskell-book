@@ -14,20 +14,20 @@
 #+cite_export: csl acm-siggraph.csl
 
 We will discuss many languages in this course, but we will use [[class:sc][Haskell]] when we decide to implement a language or explain
-a language feature.  As a result, you will need to learn some [[class:sc][Haskell]].  If you want a comprehensive introduction to the
-language[fn:well] you might want to look at [[http://learnyouahaskell.com][Learn You a Haskell for Great Good]].
+a language feature.  As a result, you will need to learn some [[class:sc][Haskell]].  We will be fairly selective in what bits of
+[[class:sc][Haskell]] we teach you, preferring to show you enough to understand the course content and not much more.  This will allow
+you to get started more quickly.
 
-In this text, we will cover only the bits of [[class:sc][Haskell]] you need to do the work in this course, which should make this a faster
-introduction than others.
-
+If you want a comprehensive introduction to the language[fn:well] you might want to look at [[http://learnyouahaskell.com][Learn You a Haskell for Great
+Good]].
 
 * Sections
 
 - [[file:haskell/installation.org][Installation]]
 - [[file:haskell/declaring-variables.org][Declaring Variables]]
 - [[file:haskell/functions.org][Functions]]
-- [[file:haskell/higher-order-functions.org][Higher Order Functions]]
 - [[file:haskell/disjoint-types.org][Disjoint Types]]
+# - [[file:haskell/higher-order-functions.org][Higher Order Functions]] (Not written yet)
 
 [fn:well] Well, reasonably comprehensive anyway; there are a lot of extensions and advanced features that you learn about through
 research papers and blogs.
