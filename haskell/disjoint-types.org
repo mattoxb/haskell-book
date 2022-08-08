@@ -1,0 +1,152 @@
+#+TITLE: Disjoint Types
+#+SUBTITLE:
+#+AUTHOR: Mattox Beckman
+#+PRINT-DATE: July 2022
+#+COPYRIGHT-DATE: 2022
+#+MARGIN-NOTE-FONT: \itshape\footnotesize
+#+LATEX_CLASS: tufte-book
+#+HTML_HEAD: <link rel="stylesheet" href="../css/tufte.css" type="text/css" />
+#+Comment: HTML_HEAD: <script type="text/javascript" src="https://livejs.com/live.js"></script>
+#+OPTIONS: toc:nil num:nil
+#+BIBLIOGRAPHY: ../cs.bib
+#+cite_export: csl ../acm-siggraph.csl
+
+* Objectives
+
+When you are done with this chapter, you will....
+
+- explain what a disjoint type is.
+- describe the components of a disjoint type:
+  - type names, constructors, and parameters.
+- use disjoint types to declare linked lists, options, and binary trees.
+  - write functions that traverse and manipulate them.
+- explain how memory is allocated when data is immutable.
+
+* What are Disjoint Types?
+
+A /disjoint type/ is a type that can take one or more non-overlapping forms.  For example, one representation of a list is either an empty list or a
+pair where the first element is a datum and the second is a reference to another list.  Another example is a binary tree, where you have nodes containing
+data and references to children, or else a leaf node that has neither.  In our class we will use disjoint types to represent /expression trees/.
+
+In contrast, a complex number is /not/ a disjoint type.  It has a real part and an imaginary part, but these always come together.  This applies also to
+data structures like pairs, arrays, or strings.  Each of these may have components, but there is fundamentally only one representation for them.
+
+* Syntax
+
+The keyword =data= starts a disjoint type declaration.  You then supply a name (capitalized) followed by zero or more /type variables/ (lower case).
+After that you declare one or more /constructors/ (capitalized), each with zero or more type names to be used as positional parameters.
+
+That will make more sense if you see some examples.
+
+** Example 1 --- Integer Lists
+
+For our first example, we will make a linked list similar to the built-in one, but it will only accept integers.
+
+#+begin_src haskell
+data IList = ICons Integer IList
+           | INil
+    deriving (Eq,Show)
+#+end_src
+
+- The name of the type is =IList=.  There are no type parameters for this type.
+- The first constructor is =ICons= and takes two parameters: an =Integer= and another =IList=.
+- The second constructor is =INil= and takes no parameters.
+- The =deriving (Show,Eq)= tells  [[class:sc][Haskell]] to define =show= and equality operations so we can print these out and compare them.
+
+You can think of =IList= as being something like a class in object oriented languages, and =ICons= and =INil= being two kinds of constructors for it.
+Calling either one of these will get you an =IList=, and in fact these are functions.
+
+#+begin_src haskell
+Prelude> :t INil
+INil :: IList
+Prelude> :t ICons
+ICons :: Integer -> IList -> IList
+#+end_src
+
+Let's create a few lists:
+
+#+begin_src haskell
+Prelude> i1 = INil
+Prelude> i2 = ICons 10 (ICons 20 INil)
+Prelude> i3 = ICons 44 i2
+Prelude> i3
+ICons 44 (ICons 10 (ICons 20 INil))
+#+end_src
+
+Variable =i1= just contains an =INil=.  Variable =i2= is a list containing 10 and 20.  Variable =i3= contains 44, 10, and 20.
+
+*** Memory Considerations
+
+It is helpful if you understand how memory is allocated.  The rule is simple: whenever you see the name of a constructor in an
+expression context (i.e., not as a function pattern) it allocates memory.  If you see a variable then it is a reference, sharing
+the memory. So there are five memory allocations in the above code.  Variables =i2= and =i3= share the list containing 10 and 20.
+
+
+
+
+
+
+
+** Example 2 --- List of Anything
+
+** Example 3 --- Options
+
+** Example 4 --- Binary Trees
+
+** Example 5 --- Something Crazy
+
+
+Here's an example:
+
+#+begin_src haskell
+data Foo a b = Bar Integer a
+             | Baz b
+             | Quux
+    deriving (Show,Eq)
+#+end_src
+
+In this example, =Foo= is the name of the type, and it takes two type variables =a= and =b=.  The three constructors are =Bar=, =Baz=, and =Quux=.
+As you see, it's possible for a constructor to take no parameters at all.
+To instantiate this, you can use the =REPL=.
+
+#+begin_src haskell
+Prelude> x = Bar 10 True
+Prelude> y = Baz "Hi"
+Prelude> z = Quux
+Prelude> x
+Bar 10 True
+Prelude> y
+Baz "Hi"
+Prelude> z
+Quux
+Prelude> :t x
+x :: Foo Bool b
+Prelude> :t y
+y :: Foo a [Char]
+Prelude> :t z
+z :: Foo a b
+#+end_src
+
+Notice that =Bar= takes two parameters, and the type of the second parameter determines the type of type parameter =a=.  The second type =b= is was unspecified by
+=x= so it is left there.  This is similar to what you saw with the empty list having type =[a]= earlier.
+
+You can use a type declaration to force the unconstrained part if necessary:
+
+#+begin_src haskell
+Prelude> a = Bar 10 True :: Foo Bool String
+Prelude> a
+Bar 10 True
+Prelude> :t a
+a :: Foo Bool String
+#+end_src
+
+It
+
+* References
+
+#+print_bibliography:
+
+* End :noexport:
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook  #'org-tufte-export-to-file nil t)
+;; End:

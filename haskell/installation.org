@@ -1,0 +1,151 @@
+#+TITLE: Installing Haskell
+#+SUBTITLE: Getting started is the hardest part
+#+AUTHOR: Mattox Beckman
+#+PRINT-DATE: February 2022
+#+COPYRIGHT-DATE: 2022
+#+WEB-SITE: http://mattoxb.github.io/haskell-book
+#+MARGIN-NOTE-FONT: \itshape\footnotesize
+#+LATEX_CLASS: tufte-book
+#+HTML_HEAD: <link rel="stylesheet" href="../css/tufte.css" type="text/css" />
+#+OPTIONS: num:nil
+#+BIBLIOGRAPHY: ../cs.bib
+#+cite_export: csl ../acm-siggraph.csl
+
+* Objectives
+
+When you are done with this chapter, you will...
+
+- be able to describe the difference between [[class:sc][Haskell]] tools such as =ghc=, =ghci=, and =stack=, and
+- install these things on your computer.
+
+This kind of information tends to become out of date quickly, but the advantage of publishing to html is that we can
+also update this quickly.  Let us know if something is out of date.
+
+* Installation
+
+** Recommended Method: =ghcup=
+
+The [[class:sc][Haskell]] site has an installer called [[https://www.haskell.org/ghcup/][=ghcup=]] that is multi-platform.  If you
+are not generally comfortable installing things on your computer (and even if you are) then this is one of the better
+choices.  If you are running windows, then use this with the [[https://devblogs.microsoft.com/commandline/a-guide-to-invoking-wsl/][Windows Subsystem for Linux]] (usually
+just called =WSL=).
+
+** Linux options
+
+If you are running Linux, then your package manager might also be a good option.  This is particularly true of
+[[https://nixos.org][nixos]].
+
+** Mac Options
+
+For Apple computers, you might want to use the /homebrew/ system.
+
+#+begin_src bash
+$ brew install haskell-stack
+#+end_src
+
+** Windows Options
+
+First take a Linux installation disk and ... no?  Okay, fine.  Using =ghcup= as described above is probably your best
+bet.
+
+** What should I install?
+
+You will need =ghc= and =stack=, and we also recommend =cabal= and =HLS=.  We'll describe these next.
+
+* The Tools
+
+Now that you've install these things, here is what they do.
+
+** =ghc=
+
+The main compiler is called =ghc=, standing for Glasgow Haskell Compiler.  You can compile a program with it into a
+standalone executable.  If you create a file =hello.hs= with this content:
+
+#+begin_src haskell
+main = do putStrLn "Hello, world!"
+#+end_src
+
+This creates a =main= function that does the traditional thing.  You can compile and run it from the command line[fn:1] with:
+
+#+begin_src
+$ gch foo.hs
+$ ./foo
+Hello, world!
+#+end_src
+
+** =ghci=
+
+You will not be using the standalone compiler much in this course.  You will be using the interactive version called
+=ghci=, where the =i= stands for /interactive/.  This tool gives you an interactive shell that lets you prototype and
+test your code.  If you have used [[class:sc][Python]], [[class:sc][Ruby]], or any [[class:sc][Lisp]] dialect, this will
+be familiar to you.  We call this kind of thing a REPL, abbreviating Read Eval Print Loop.
+
+The simplest way to start it is to run =ghci= with the file name.  The prompt will be something like =Prelude>= if you
+have not loaded a file or =Main>=, depending on the module name.  Use control-D to exit.  In this example you can see
+us run the =main= function.
+
+#+begin_src bash
+$ ghci foo.hs
+GHCi, version 8.10.7: https://www.haskell.org/ghc/  :? for help
+[1 of 1] Compiling Main             ( foo.hs, interpreted )
+Ok, one module loaded.
+*Main> main
+Hello, world.
+*Main>
+Leaving GHCi.
+#+end_src
+
+You can also start the REPL by itself.  In addition to running [[class:sc][Haskell]] code, you can use =:l= to load a
+file and =:r= to reload a file for example after you have changed something.
+
+#+begin_src  bash
+$ ghci
+GHCi, version 8.10.7: https://www.haskell.org/ghc/  :? for help
+Prelude> :load foo
+[1 of 1] Compiling Main             ( foo.hs, interpreted )
+Ok, one module loaded.
+*Main> main
+Hello, world.
+*Main> :r
+Ok, one module loaded.
+*Main> main
+Hello, world.
+*Main>
+#+end_src
+
+A common workflow is to have your favorite editor running in one window and the REPL running in another.  Note that
+running =:r= will erase anything you defined in the REPL earlier.  Another useful command is =:t=, which will tell you
+the type of any expression.
+
+#+begin_src bash
+$ ghci
+GHCi, version 8.10.7: https://www.haskell.org/ghc/  :? for help
+Prelude> :t 12
+12 :: Num p => p
+Prelude> :t "hi"
+"hi" :: [Char]
+#+end_src
+
+We will explain the types in a different section.
+
+** =stack=
+
+The =stack= program is a combination of a build system and a package manager.  You will use this most of the time.
+
+- =stack repl= will start =ghci= for you, and automatically load any files that are in the project in the current
+  directory.  This is how you will interact with the code for your machine problems.
+
+- =stack test= will run the provided test cases against your code.  Some of the tests are unit tests, but we are slowly
+  replacing them with randomized specification-based tests.
+
+- There are many other commands; run =stack help= to look at them and see what kinds of things are possible.
+
+[fn:1] We will use Linux for our command line examples, but we try to be OS agnostic in the course.  The =$= will be the
+command line prompt.  Whatever system you use, as CS students you should absolutely be comfortable using the command
+line.
+
+
+* End :noexport:
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook  #'org-tufte-export-to-file nil t)
+;; End:

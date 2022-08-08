@@ -1,0 +1,245 @@
+#+TITLE: Functions
+#+SUBTITLE: This is a functional language, after all!
+#+AUTHOR: Mattox Beckman
+#+PRINT-DATE: July 2022
+#+COPYRIGHT-DATE: 2022
+#+MARGIN-NOTE-FONT: \itshape\footnotesize
+#+LATEX_CLASS: tufte-book
+#+HTML_HEAD: <link rel="stylesheet" href="../css/tufte.css" type="text/css" />
+#+Comment: HTML_HEAD: <script type="text/javascript" src="https://livejs.com/live.js"></script>
+#+OPTIONS: toc:nil num:nil
+#+BIBLIOGRAPHY: ../cs.bib
+#+cite_export: csl ../acm-siggraph.csl
+
+* Objectives
+
+When you are done with this chapter, you will....
+
+- Be able to declare functions of one or multiple variables,
+- Explain the types of functions,
+- Use currying to partially apply functions,
+- Use pattern patching to work with lists.
+
+* Function declarations
+
+Let's get started with this function declaration:
+
+#+begin_src haskell
+inc :: Integer -> Integer
+inc a = a + 1
+
+plus :: Integer -> Integer -> Integer
+plus a b = a + b
+#+end_src
+
+The first function =inc= (short for /increment/)takes one parameter =a= and returns =a + 1=.  The type is
+=Integer -> Integer=, which means if you give an integer to =inc= it will return one back.
+
+The function =plus= has two parameters, =a= and =b=.  The type indicates that if you give two integer arguments to
+it you will get an integer back.
+
+To call a function, you use juxtaposition:
+
+#+begin_src haskell
+Main> inc 10
+11
+Main> plus 10 32
+42
+#+end_src
+
+Some useful vocab words:
+- the variables =a= and =b= here are called /parameters/.
+- The expressions 10 and 32 are called /arguments/.  Many people use these two terms interchangeably but we will keep them distinct here.
+- The expression =a + 1= is the /body of the function/ =inc=, likewise =a + b= is the body of =plus=.
+
+Function application has the highest precedence of any operation in [[class:sc][Haskell]].
+Usually this makes the code very concise.  For example, you can say =inc 10 * plus 30 2= and get =320= as a result.
+You can use parenthesis to enforce a different grouping, such as =inc (10 + 3)= to get =14=.
+
+#+begin_alert
+Don't get into the habit of putting unnecessary parenthesis around function parameters.  You can write =inc(10)= and it will work,
+but everyone who sees it will think you're a noob.
+#+end_alert
+
+
+* Currying
+
+Look at the type of =plus= again.  We said it takes two integers and returns an integer, but it's a bit more complicated than that.
+You can also think of the type =Integer -> Integer -> Integer= as saying that if you give it a single integer, you will get back a function
+of type =Integer -> Integer=.
+
+For example, we could have defined =inc= this way:
+
+#+begin_src haskell
+inc = plus 1
+#+end_src
+
+This style of function application is called /currying/, named after the logician [[https://en.wikipedia.org/wiki/Haskell_Curry][/Haskell Curry/]].
+If you become a logician, maybe someday they will name a language after you too.
+
+This brings up an important concept: functions can return other functions in this language.  We will talk more about that in the chapter on
+[[file:higher-order-functions.org][Higher Order Functions]].
+
+* Pattern Matching
+
+[[class:sc][Haskell]] functions allow you to specify patterns in the parameter list.  Here's a weird example.
+
+#+begin_src haskell
+foo :: Integer -> Integer -> Integer
+foo 1 n = n + 1
+foo 2 n = n * 2
+foo 3 n = n * n
+foo _ n = n
+#+end_src
+
+The function =foo= has four separate "versions".  So, =foo 1 10= will return 11, =foo 2 10= will return 20, =foo 3 10= will return 100, and =foo 5 10= (or any other
+number but 1,2, or 3 in the first position) will return 10.  The underscore character means that =foo= is going to ignore the input in that position.  If there is more
+than one pattern that could match the input, the first one in the list wins.  If you wrote =foo _ n = n= before the other patterns, none of the others would ever
+get called. The compiler will usually warn you if a pattern is unreachable.
+
+[[class:sc][Haskell]] programmers tend to use patterns whenever possible.  Here, for comparison, are three different ways to write the factorial function:
+
+This first way is the most common form, but be careful not to call it on a negative number or you'll get
+[[https://en.wikipedia.org/wiki/Turtles_all_the_way_down][turtles all the way down]]!
+
+#+begin_src haskell
+fact 0 = 1
+fact n = n * fact (n-1)
+#+end_src
+
+People who are new to [[class:sc][Haskell]] but know other languages such as C++ will tend to write the function this way:
+
+#+begin_src haskell
+fact n =
+   if n == 0
+      then 1
+      else n * fact (n-1)
+#+end_src
+
+There's nothing technically wrong with this code, but it less concise and considered unidomatic.
+
+There is one other option you have: the pattern guard.
+
+#+begin_src haskell
+fact n | n == 0    = 1
+       | otherwise = n * fact (n-1)
+#+end_src
+
+You can put the =|= symbol after the parameter list and give a boolean expression.  If this expression is true, then the
+pattern is considered a match and the corresponding function body runs.  As before, patterns are tried from top to bottom.
+The pattern =otherwise= matches anything and is actually defined as =otherwise = True=.
+
+You will use pattern matching heavily in this course, especially once we introduce disjoint types.
+One disjoint type you have already seen is the list.  A list has two forms: an empty list and a list with data in it.
+The pattern for an empty list is =[]=, and the pattern for a non-empty list is =x:y=, where =x= is the first element of a list
+and =y= is a reference to the rest of the list.  The =:= pattern is right-associative.  To to create the list 1,2,3, you could write
+
+#+begin_src haskell
+m = 1 : 2 : 3 : []
+#+end_src
+
+or also
+#+begin_src haskell
+m = [1,2,3]
+#+end_src
+
+Here are a couple of functions that work on lists.
+
+#+begin_src haskell
+length [] = 0
+length (x:xs) = 1 + length xs
+
+sum [] = 0
+sum (x:xs) = x + sum xs
+#+end_src
+
+Functions that work on list will almost always use variable names like =x:xs=, where the second variable is the same as
+the first but with an =s= added.  This is a naming convention, and since it is almost universally followed you should
+probably follow it too, but you could use other names if you wanted, like =first:rest=.
+
+Another thing to watch out for is that the =x:xs= needs to be in parenthesis since function application binds more tightly
+than =:= does.
+
+The =:= can be "stacked" if you need to.  For example, this function takes each two elements and adds them together:
+=foo [10,20,30,40]= yields =[30,70]=
+
+#+begin_src haskell
+foo [] = []
+foo (a:b:c) = a+b : foo c
+#+end_src
+
+Note that this function is partial!  If you call it on a list with an odd number of elements you will get an error message
+=Non-exhaustive patterns in function foo=.
+
+
+* Defining Operators
+
+You can define operators in this language.  Here is the definition of the list append function:
+
+#+begin_src haskell
+(++) :: [a] -> [a] -> [a]
+(++) [] yy = yy
+(++) (x:xs) yy = x : (xs ++ yy)
+#+end_src
+
+You can also write the definition in infix form, but it is sometimes harder to read:
+
+#+begin_src haskell
+(++) :: [a] -> [a] -> [a]
+[] ++ yy = yy
+(x:xs) ++ yy = x : (xs ++ yy)
+#+end_src
+
+In general, putting parenthesis around any operator makes it behave like a typical function.
+
+You can also but backquotes around a function name to make it infix.  So you can write =10 `plus` 20= to get 30 if you want.
+
+* Exercises
+
+1. Write a function =product= that multiplies all the elements of a list together.  Be careful about your base case!
+
+#+html: <details> <summary> Reveal Solution </summary>
+#+begin_src haskell
+product [] = 1
+product (x:xs) = x * product xs
+#+end_src
+#+html: </details>
+
+2. Write a function =power n x= that takes the nth power of $x$.
+
+#+html: <details> <summary> Reveal Solution </summary>
+#+begin_src haskell
+power 0 x = 1
+power n x = x * power (n-1)
+#+end_src
+
+You can make it more efficient:
+
+#+begin_src haskell
+power 0 x = 1
+power n x | x % 2 == 0 = power (n/2) (x*x)
+          | otherwise  = n * power (n-1) x
+#+end_src
+#+html: </details>
+
+3. Write a function =minList= that returns the minimum element of a list.
+   Assume the list has at least one element.  There is a built-in function =min= that will help.
+
+#+html: <details> <summary> Reveal Solution </summary>
+#+begin_src haskell
+minList [x] = x
+minList (x:xs) = min x (minList xs)
+#+end_src
+
+If you let [[class:sc][Haskell]] infer the type, you will see =minList :: Ord n => [n] -> n=.  The =Ord=
+typeclass provides comparison operators.
+#+html: </details>
+
+*** References
+
+#+print_bibliography:
+
+* End :noexport:
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook  #'org-tufte-export-to-file nil t)
+;; End:

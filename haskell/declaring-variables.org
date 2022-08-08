@@ -1,0 +1,170 @@
+#+TITLE: Variable Declarations and Types
+#+SUBTITLE: The Beginnings
+#+AUTHOR: Mattox Beckman
+#+PRINT-DATE: May 2022
+#+COPYRIGHT-DATE: 2022
+#+WEB-SITE: http://mattoxb.github.io/haskell-book
+#+MARGIN-NOTE-FONT: \itshape\footnotesize
+#+LATEX_CLASS: tufte-book
+#+HTML_HEAD: <link rel="stylesheet" href="../css/tufte.css" type="text/css" />
+#+COMMENT: HTML_HEAD: <script type="text/javascript" src="https://livejs.com/live.js"></script>
+#+OPTIONS: toc:nil num:nil
+#+BIBLIOGRAPHY: cs.bib
+#+cite_export: csl acm-siggraph.csl
+
+* Objectives
+
+When you are done with this chapter, you will...
+
+- Declare and initialize variables in a file and in the REPL,
+- Use type declarations to tell the compiler what type a value should be,
+- Explain the difference between a type and a type constraint,
+- Declare values of the following types:
+  - =Int= and =Integer=
+  - =Bool=
+  - =Double=
+  - =Char= and =String=
+  - =Lists=
+- and use type inference to avoid declaring types (and explain why you might not want to).
+
+We will look at functions in the next chapter.
+
+* Prerequisites
+
+- You should have installed [[class:sc][Haskell]] on your own computer or have access to it online.
+- You should be able to use the REPL as well as load definitions from a file.
+
+* First Declarations
+
+Create a file =vars.hs= with the following lines in it.
+
+#+begin_src haskell
+jpn :: Int
+jpn = 8675309
+
+answer :: Integer
+answer = 42
+
+somePi :: Double
+somePi = 3.14159
+
+status :: Bool
+status = True
+
+zero :: Char
+zero = '0'
+#+end_src
+
+This code declares and defines five variables. You'll notice that there are two lines for each; the first line declares
+the /type/, and the second line declares the /value/. The value declaration must follow immediately after the type
+declaration. It turns out that in [[class:sc][Haskell]] is really two languages. The "main" language is the language for
+talking about expressions, and is what people usually mean when they say the word [[class:sc][Haskell]]. The second
+language is the type language. Most people only use the simpler aspects of it to declare the types of variables and
+functions, but in fact the type language is also Turing Complete. [fn:interview]
+
+The first variable is named =jpn= and has type =Int=. The type =Int= represents 32-bit machine-integers.
+
+The second variable is named =answer= and has type =Integer=.  The type =Integer= represents the integers you see in Mathematics.
+They are not bounded by a set number of bits; they are bound only by the amount of memory you have.  Some languages call these /BigInts/,
+and you may have used them in languages such as [[class:sc][Python]] or [[class:sc][Java]].
+
+There is also =status= of Boolean type (note that =True= and =False= in this language are capitalized), and =zero=, a single character.
+Characters are enclosed in single quotes.
+
+Now you can start up a REPL and interact with the variables.  In the code below, the =Prelude>= and =*Main>= lines are prompts.
+The text before it tells you what modules are loaded.  We did not declare a module in the file, so [[class:sc][Haskell]] made
+one by default.  You can hit Control-D to exit.
+
+#+begin_src haskell
+Prelude> :l vars
+[1 of 1] Compiling Main             ( vars.hs, interpreted )
+Ok, one module loaded.
+*Main> status
+True
+*Main> foo = answer + 1
+*Main> foo
+43
+*Main> :t foo
+foo :: Integer
+#+end_src
+
+In the above sample run, we create a new variable in the REPL named =foo= that is equal to =answer + 1=, or 43.  Notice
+we did not have a type declaration like in the =vars.hs= file.  [[class:sc][Haskell]] has automatic type inference, so
+it is able to determine the type of an expression by context.  It is in fact possible to write an entire program without
+these type annotations, but unless you are writing a "throwaway" script it is better that you leave the type annotations
+in, for two reasons: first, the annotations tell the compiler what you intended to do and allow it to detect any errors
+more quickly and give better error messages; second, the annotation also serves as documentation so you will know what
+you were thinking when you read the code again in a few years.
+
+* Lists and Strings
+
+One data structure you will see all the time in [[class:sc][Haskell]] is the list.  One way to create them is to write out
+the elements between square brackets.  It will look like an array from other languages like [[class:sc][Python]], but in fact
+they are singly linked lists.
+
+#+begin_src haskell
+*Main> xx = [foo,3,4]
+*Main> :t xx
+xx :: [Integer]
+#+end_src
+
+Notice that type also is within square brackets; we read this as "a list of integers."  A list in [[class:sc][Haskell]] has to
+be /monomorphic/, that is, the contents must all be of the same type.  A list like =[10,"hi",True]= would not be allowed.  We
+will say more about lists in a future chapter, but we need to mention it now because the default representation of strings in
+[[class:sc][Haskell]] is a list of characters.
+
+#+begin_src haskell
+Main> greeting = "Hello, world!"
+Main> :t greeting
+greeting :: [Char]
+#+end_src
+
+If you are writing out type declarations, the type =String= is a synonym for =[Char]=.  Haskell has several other, more efficient
+representations for strings, but we will not need them in this course.
+
+* Type Variables and Constraints
+
+What do you think is the type of an empty list?
+
+#+begin_src haskell
+Main> xx = []
+Main> :t xx
+[] :: [a]
+#+end_src
+
+Type type =a= is a /type variable/.  The type =[a]= means "a list of anything".  You will see type variables a lot, especially when
+you work with container types or polymorphic functions.
+
+Sometimes you want a type of data that has certain operations available, but you don't care about the specific type.  For example,
+you might want something that is a number, but you don't care if it's an =Int=, =Integer=, or =Float=.  Consider this code:
+
+#+begin_src haskell
+Main> x = 10
+Main> :t x
+x :: Num p => p
+Main> y = [10,30]
+Main> :t y
+y :: Num a => [a]
+#+end_src
+
+The type =Num p => p= indicates that type =p= belongs to a /type class/ =Num=.[fn:class]  The =Num p= part is called a /type
+constraint/, and is similar to interfaces in languages like [[class:sc][Java]].  In this case it says that type =p= must
+be in the class =Num=.  For the variable =y= the constraint is =Num a= and the type is =[a]=, meaning the list can be
+considered any type that is numeric.
+
+There are many different type constraints available in [[class:sc][Haskell]], and you will be writing them yourself in this course.
+
+In the [[class:sc][Repl]] you can use =:info Num= to see what operations are available for the =Num= class.  It's a good way to
+discover functionality you might not have guessed.
+
+
+[fn:interview] There is a famous (?) blog post [[https://aphyr.com/posts/342-typing-the-technical-interview][Typing the Technical Interview]]
+in which the protagonist solves the 8-queens problem using [[class:sc][Haskell]]'s type language.  It looks a little like [[class:sc][Prolog]].
+
+[fn:class] We refer to these as /type classes/, or just /classes/ for short, but they are not classes in the object oriented
+language sense of the word; it is more like a "classification".
+
+* End :noexport:
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook  #'org-tufte-export-to-file nil t)
+;; End:
