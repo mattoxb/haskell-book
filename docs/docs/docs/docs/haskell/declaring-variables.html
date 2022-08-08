@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-08-08 Mon 14:13 -->
+<!-- 2022-07-12 Tue 10:46 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Variable Declarations and Types</title>
@@ -202,9 +202,9 @@
 <span class="subtitle">The Beginnings</span>
 </h1>
 
-<div id="outline-container-org8dd6816" class="outline-2">
-<h2 id="org8dd6816">Objectives</h2>
-<div class="outline-text-2" id="text-org8dd6816">
+<div id="outline-container-org049e18d" class="outline-2">
+<h2 id="org049e18d">Objectives</h2>
+<div class="outline-text-2" id="text-org049e18d">
 <p>
 When you are done with this chapter, you will&#x2026;
 </p>
@@ -230,9 +230,9 @@ We will look at functions in the next chapter.
 </div>
 </div>
 
-<div id="outline-container-org6028d1a" class="outline-2">
-<h2 id="org6028d1a">Prerequisites</h2>
-<div class="outline-text-2" id="text-org6028d1a">
+<div id="outline-container-org0172651" class="outline-2">
+<h2 id="org0172651">Prerequisites</h2>
+<div class="outline-text-2" id="text-org0172651">
 <ul class="org-ul">
 <li>You should have installed <span class="sc">Haskell</span> on your own computer or have access to it online.</li>
 <li>You should be able to use the REPL as well as load definitions from a file.</li>
@@ -240,9 +240,9 @@ We will look at functions in the next chapter.
 </div>
 </div>
 
-<div id="outline-container-org3e80ee5" class="outline-2">
-<h2 id="org3e80ee5">First Declarations</h2>
-<div class="outline-text-2" id="text-org3e80ee5">
+<div id="outline-container-org4748502" class="outline-2">
+<h2 id="org4748502">First Declarations</h2>
+<div class="outline-text-2" id="text-org4748502">
 <p>
 Create a file <code>vars.hs</code> with the following lines in it.
 </p>
@@ -271,7 +271,8 @@ talking about expressions, and is what people usually mean when they say the wor
 language is the type language. Most people only use the simpler aspects of it to declare the types of variables and
 functions, but in fact the type language is also Turing Complete. <label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle"/><span class="sidenote">
 There is a famous (?) blog post <a href="https://aphyr.com/posts/342-typing-the-technical-interview">Typing the Technical Interview</a>
-in which the protagonist solves the 8-queens problem using <span class="sc">Haskell</span>&rsquo;s type language.  It looks a little like <span class="sc">Prolog</span>.
+in which the protagonist solves the 8-queens problem using <span class="sc">Haskell</span>&rsquo;s type language.
+It looks a little like <span class="sc">Prolog</span>.
 </span>
 </p>
 
@@ -320,9 +321,9 @@ you were thinking when you read the code again in a few years.
 </div>
 </div>
 
-<div id="outline-container-org33f2581" class="outline-2">
-<h2 id="org33f2581">Lists and Strings</h2>
-<div class="outline-text-2" id="text-org33f2581">
+<div id="outline-container-org748493d" class="outline-2">
+<h2 id="org748493d">Lists and Strings</h2>
+<div class="outline-text-2" id="text-org748493d">
 <p>
 One data structure you will see all the time in <span class="sc">Haskell</span> is the list.  One way to create them is to write out
 the elements between square brackets.  It will look like an array from other languages like <span class="sc">Python</span>, but in fact
@@ -353,9 +354,9 @@ representations for strings, but we will not need them in this course.
 </div>
 </div>
 
-<div id="outline-container-org4783cd3" class="outline-2">
-<h2 id="org4783cd3">Type Variables and Constraints</h2>
-<div class="outline-text-2" id="text-org4783cd3">
+<div id="outline-container-orgc164cc2" class="outline-2">
+<h2 id="orgc164cc2">Type Variables and Constraints</h2>
+<div class="outline-text-2" id="text-orgc164cc2">
 <p>
 What do you think is the type of an empty list?
 </p>
@@ -401,12 +402,19 @@ There are many different type constraints available in <span class="sc">Haskell<
 In the <span class="sc">Repl</span> you can use <code>:info Num</code> to see what operations are available for the <code>Num</code> class.  It&rsquo;s a good way to
 discover functionality you might not have guessed.
 </p>
+
+
+
+<p>
+*
+</p>
 </div>
 </div>
 <!-- Footnotes --><!-- 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
 There is a famous (?) blog post <a href="https://aphyr.com/posts/342-typing-the-technical-interview">Typing the Technical Interview</a>
-in which the protagonist solves the 8-queens problem using <span class="sc">Haskell</span>&rsquo;s type language.  It looks a little like <span class="sc">Prolog</span>.
+in which the protagonist solves the 8-queens problem using <span class="sc">Haskell</span>&rsquo;s type language.
+It looks a little like <span class="sc">Prolog</span>.
 </p></div></div>
 
 <div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
@@ -417,7 +425,7 @@ language sense of the word; it is more like a &ldquo;classification&rdquo;.
  --></div>
 <div id="postamble" class="status">
 <p class="author">Author: Mattox Beckman</p>
-<p class="date">Created: 2022-08-08 Mon 14:13</p>
+<p class="date">Created: 2022-07-12 Tue 10:46</p>
 </div>
 </body>
 </html>

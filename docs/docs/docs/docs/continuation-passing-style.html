@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-03-19 Sat 14:32 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Continuation Passing Style</title>
+<meta name="author" content="Mattox Beckman" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="stylesheet" href="css/tufte.css" type="text/css" />
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Continuation Passing Style</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org20edd49">1. Basic Continuations</a>
+<ul>
+<li><a href="#orge17e921">1.1. Direct Style</a></li>
+<li><a href="#org66674d2">1.2. Continuation Passing Style</a></li>
+</ul>
+</li>
+<li><a href="#orgb290d78">2. Continuations and Recursion</a>
+<ul>
+<li><a href="#org69cc7e7">2.1. Accumulator Recursion</a></li>
+<li><a href="#orgf5ed476">2.2. Continuation Passing</a>
+<ul>
+<li><a href="#org8dbf279">2.2.1. Comparing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org25b9faf">3. Multiple Continuations</a></li>
+</ul>
+</div>
+</div>
+<p>
+A continuation takes the idea of a function&rsquo;s return value and generalizes it.  Normally a function returns a value to
+the expression that called the function in the first place.  But what if a function could return <i>somewhere else</i>
+instead?  We call this <i>somewhere else</i> a <i>continuation</i>.
+</p>
+
+<div id="outline-container-org20edd49" class="outline-2">
+<h2 id="org20edd49"><span class="section-number-2">1.</span> Basic Continuations</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orge17e921" class="outline-3">
+<h3 id="orge17e921"><span class="section-number-3">1.1.</span> Direct Style</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+The functions you have been writing until now have been in a form known as <i>direct style</i>.  The functions take an
+argument, and then return a result to the calling expression.
+</p>
+
+<p>
+Consider this simple example:
+</p>
+
+<pre class="code"><code><span style="color: #D8B941;">dec</span> a <span style="color: #86e7d7;">=</span> a <span style="color: #86e7d7;">-</span> <span style="color: #D85F00; font-weight: bold;">1</span>
+<span style="color: #D8B941;">double</span> a <span style="color: #86e7d7;">=</span> a <span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">2</span>
+<span style="color: #D8B941;">inc</span> a <span style="color: #86e7d7;">=</span> a <span style="color: #86e7d7;">+</span> <span style="color: #D85F00; font-weight: bold;">1</span>
+<span style="color: #D8B941;">report</span> a <span style="color: #86e7d7;">=</span> a
+</code></pre>
+
+<p>
+We can run it like this:
+</p>
+
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> double (dec <span style="color: #D85F00; font-weight: bold;">3</span>)
+<span style="color: #D85F00; font-weight: bold;">4</span>
+</code></pre>
+
+<p>
+How does this happen?  The first thing to execute is the call to <code>dec</code>.  Function <code>dec</code> consumes the 3, and when it
+finishes, returns its result to the surrounding expression.  The result is the expression <code>double 2</code>.
+</p>
+
+<p>
+Let&rsquo;s consider the role of <code>double</code> in this expression.  It is waiting to receive the result of the <code>dec 3</code> computation.
+We can represent this by writing &ldquo;<code>double</code> \(\bullet\)&rdquo;.  This is an expression with a &ldquo;hole&rdquo; where the \(\bullet\) is.
+When <code>dec</code> returns, that hole is filled with the result, and the expression continues.  We can call <code>double</code> the
+<i>continuation</i> of <code>dec 3</code>.
+</p>
+
+
+<p>
+Consider another example:
+</p>
+
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> dec (double (inc <span style="color: #D85F00; font-weight: bold;">20</span>))
+<span style="color: #D85F00; font-weight: bold;">41</span>
+</code></pre>
+
+<p>
+The first function called is <code>inc</code>.  When it finishes, it will return its result to the surrounding expression, which we
+represent as <code>dec (double</code> \(\bullet\) <code>)</code> &#x2014; its continuation.  Function <code>double</code> consumes the result and returns 42 to
+its own continuation <code>dec $\bullet$</code>.
+</p>
+
+<p>
+One way to think of a continuation is that it&rsquo;s a way of identifying the <i>rest of the program</i>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org66674d2" class="outline-3">
+<h3 id="org66674d2"><span class="section-number-3">1.2.</span> Continuation Passing Style</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+You will notice that the expressions we called continuations were like normal expressions, but each had a hole which we
+could fill with a value later.  We have seen this before!  Functions do the same thing: they are expressions with a hole
+(a named one, called a <i>parameter</i>) that we fill in later when we call the function.
+</p>
+
+<p>
+The similarity is good enough that we can use functions to implement continuations.  Consider the following program.
+Each of these functions takes an additional argument <code>k</code> as a continuation, and the continuation represents &ldquo;what comes
+next&rdquo; in the program.
+</p>
+
+<pre class="code"><code><span style="color: #D8B941;">cdec</span> a k <span style="color: #86e7d7;">=</span> k (a <span style="color: #86e7d7;">-</span> <span style="color: #D85F00; font-weight: bold;">1</span>)
+<span style="color: #D8B941;">cdouble</span> a k <span style="color: #86e7d7;">=</span> k (a <span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">2</span>)
+<span style="color: #D8B941;">cinc</span> a k <span style="color: #86e7d7;">=</span> k (a <span style="color: #86e7d7;">+</span> <span style="color: #D85F00; font-weight: bold;">1</span>)
+<span style="color: #D8B941;">report</span> a <span style="color: #86e7d7;">=</span> a
+</code></pre>
+
+<p>
+Let&rsquo;s try this out:
+</p>
+
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> cdec <span style="color: #D85F00; font-weight: bold;">3</span> report
+<span style="color: #D85F00; font-weight: bold;">2</span>
+</code></pre>
+
+<p>
+Here, <code>cdec</code> took an argument 3 and a continuation <code>report</code>.  When it had finished performing its computation with 3, it
+passed the result to <code>report</code> rather than returning the result to the calling expression.  This is one of the properties
+of functions written in CPS: they do not return<label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle"/><span class="sidenote">
+Truth in advertising: in <span class="sc">Haskell</span>, the
+<code>report</code> function actually does return the final result.  But you will
+notice that it is a tail call, so the computation is over by the time that happens.  In
+a language that supports real continuations, a &ldquo;final&rdquo; continuation such as
+<code>report</code> would not return at all.
+</span>.  Instead, they call their continuation directly.
+</p>
+
+<p>
+Another way to look at this is to say that a continuation is a generalization of a <code>return</code> keyword.  We can override
+what <code>return</code> does.  Instead of returning to the expression which called it, a function can pass its result to an
+arbitrary location.  (Imagine what our code would look like if we used the name <code>return</code> (which is not a keyword in
+<span class="sc">Haskell</span>) instead of <code>k</code>.)
+</p>
+
+<p>
+We can rewrite the <code>double (dec 3)</code> example in CPS like this:
+</p>
+
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> cdec <span style="color: #D85F00; font-weight: bold;">3</span> (<span style="color: #86e7d7;">\</span>v <span style="color: #86e7d7;">-&gt;</span> cdouble v report)
+<span style="color: #D85F00; font-weight: bold;">4</span>
+</code></pre>
+
+<p>
+Here, <code>cdec</code> took 3 as an argument and <code>(\r -&gt; cdouble r report)</code> as a continuation.  When <code>cdec</code> finished, it passed
+its result to the continuation instead of returning it.  The resulting expression was <code>cdouble 2 report</code>.  Next,
+<code>double</code> consumed the 2 and passed its result to the continuation <code>report</code>.
+</p>
+
+<p>
+Our second example looks like this:
+</p>
+
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> cinc <span style="color: #D85F00; font-weight: bold;">20</span> (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> cdouble r1 (<span style="color: #86e7d7;">\</span>v2 <span style="color: #86e7d7;">-&gt;</span> dec v2 report))
+<span style="color: #D85F00; font-weight: bold;">41</span>
+</code></pre>
+
+<p>
+It is only slightly more involved than the first example.
+</p>
+
+<p>
+Note that we can rewrite the example this way:
+</p>
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> cinc <span style="color: #D85F00; font-weight: bold;">20</span> (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span>
+  cdouble v1 (<span style="color: #86e7d7;">\</span>v2 <span style="color: #86e7d7;">-&gt;</span>
+  cdec v2 report))
+<span style="color: #D85F00; font-weight: bold;">41</span>
+</code></pre>
+
+<p>
+You can pretend this is an imperative language.  The first line &ldquo;assigns&rdquo; 20 to <code>v1</code>.  The second line &ldquo;assigns&rdquo;
+<code>cdouble v1</code> to <code>v2</code>.  The third line &ldquo;decrements&rdquo; <code>v2</code> and reports it.
+</p>
+
+<p>
+Let&rsquo;s look at a more complicated example.
+</p>
+
+
+<pre class="code"><code><span style="color: #D8B941;">cinc</span> a k <span style="color: #86e7d7;">=</span> k (a<span style="color: #86e7d7;">+</span><span style="color: #D85F00; font-weight: bold;">1</span>)
+<span style="color: #D8B941;">cdec</span> a k <span style="color: #86e7d7;">=</span> k (a<span style="color: #86e7d7;">-</span><span style="color: #D85F00; font-weight: bold;">1</span>)
+<span style="color: #D8B941;">cadd</span> a b k <span style="color: #86e7d7;">=</span> k (a<span style="color: #86e7d7;">+</span>b)
+<span style="color: #D8B941;">report</span> a <span style="color: #86e7d7;">=</span> a
+</code></pre>
+
+<p>
+Suppose you wanted to evaluate the expression <code>add (inc 4) (dec 5)</code>.  How would you do it using the continuation passing
+style versions above?
+</p>
+
+<p>
+Pretending for a moment that <span class="sc">Haskell</span> isn&rsquo;t lazy, the first thing to execute is <code>inc 4</code>, so we would need
+call <code>cinc</code> first and save its result in the continuation.  Next, we would want to call <code>cdec</code>, and again save its
+result.  Finally, with the two saved results, we can call <code>cadd</code>, and pass the final answer to <code>report</code>.  Here is what
+it looks like:
+</p>
+
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> cinc <span style="color: #D85F00; font-weight: bold;">4</span> (<span style="color: #86e7d7;">\</span>a <span style="color: #86e7d7;">-&gt;</span>
+  cdec <span style="color: #D85F00; font-weight: bold;">5</span> (<span style="color: #86e7d7;">\</span>b <span style="color: #86e7d7;">-&gt;</span>
+  cadd a b report))
+<span style="color: #D85F00; font-weight: bold;">9</span>
+</code></pre>
+
+<p>
+Please make sure you understand how that code works.  Notice that the first continuation encloses the second one and
+that the inner continuation (the <code>\b -&gt; ...</code> one) has access to the scope of the outer one.
+</p>
+
+<p>
+But now consider this code:
+</p>
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> cdec <span style="color: #D85F00; font-weight: bold;">5</span> (<span style="color: #86e7d7;">\</span>b <span style="color: #86e7d7;">-&gt;</span>
+      cinc <span style="color: #D85F00; font-weight: bold;">4</span> (<span style="color: #86e7d7;">\</span>a <span style="color: #86e7d7;">-&gt;</span>
+      cadd a b report))
+<span style="color: #D85F00; font-weight: bold;">9</span>
+</code></pre>
+
+<p>
+It is different from the previous example in only one way: the order of operations has changed.  In the direct style
+example, the compiler has the option (in some languages, such as C) of evaluating <i>dec</i> and <code>inc</code> in any order.  But, if
+we use CPS, then there is only one order of operation for the expression.   What CPS has done for us is it has <i>exposed
+the program&rsquo;s flow of control</i>, and allowed us to constrain it.
+</p>
+
+<p>
+In review, this is what we have so far:
+</p>
+<ul class="org-ul">
+<li>A function written in CPS doesn&rsquo;t return.  Instead it passes its result to another function.</li>
+<li>A continuation represents &ldquo;the rest of the computation&rdquo;.</li>
+<li>The order of operations in CPS code is explicit and constrained.</li>
+<li>Calls to continuations are always tail-calls.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb290d78" class="outline-2">
+<h2 id="orgb290d78"><span class="section-number-2">2.</span> Continuations and Recursion</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Continuation passing style can do some interesting things in recursive functions.
+</p>
+
+<p>
+Consider the <code>multlist</code> function below.  It simply multiplies a list of integers together.
+</p>
+
+<pre class="code"><code><span style="color: #D8B941;">multlist</span> <span style="color: #3679D8;">[]</span> <span style="color: #86e7d7;">=</span> <span style="color: #D85F00; font-weight: bold;">1</span>
+<span style="color: #D8B941;">multlist</span> (x<span style="color: #3679D8;">:</span>xs) <span style="color: #86e7d7;">=</span> x <span style="color: #86e7d7;">*</span> multlist xs
+</code></pre>
+
+<p>
+If we were to run it with the input <code>[2, 3, 4]</code> we would get the following execution trace.  Each line represents the
+next step of the program.
+</p>
+
+<pre class="code"><code><span class="linenr">1: </span><span style="color: #D8B941;">multlist</span> [<span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>]
+<span class="linenr">2: </span><span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> (multlist [<span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>])
+<span class="linenr">3: </span><span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> (multlist [<span style="color: #D85F00; font-weight: bold;">4</span>]))
+<span class="linenr">4: </span><span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> (<span style="color: #D85F00; font-weight: bold;">4</span> <span style="color: #86e7d7;">*</span> (multlist <span style="color: #3679D8;">[]</span>)))
+<span class="linenr">5: </span><span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> (<span style="color: #D85F00; font-weight: bold;">4</span> <span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">1</span>))
+<span class="linenr">6: </span><span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">4</span>)
+<span class="linenr">7: </span><span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">12</span>
+<span class="linenr">8: </span><span style="color: #D85F00; font-weight: bold;">24</span>
+</code></pre>
+
+<p>
+As the computation progresses, we stack up recursive calls until we reach the base case, and then return from all the
+recursive calls to compute the result.
+</p>
+
+<p>
+Consider what&rsquo;s happening in line 2 of the sample run: &ldquo;<code>2 *</code> \(\bullet\)&rdquo; is the continuation for the expression <code>(multlist [3, 4])</code>.
+</p>
+</div>
+
+<div id="outline-container-org69cc7e7" class="outline-3">
+<h3 id="org69cc7e7"><span class="section-number-3">2.1.</span> Accumulator Recursion</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Another style of recursion avoids the use of the stack by accumulating the value in a separate parameter.  The
+<code>amlutlist</code> function below is an example:
+</p>
+
+<pre class="code"><code><span style="color: #D8B941;">amlutlist</span> <span style="color: #3679D8;">[]</span>      acc <span style="color: #86e7d7;">=</span> acc
+<span style="color: #D8B941;">amlutlist</span> (x<span style="color: #86e7d7;">::</span>xs) acc <span style="color: #86e7d7;">=</span> amultlist xs (x <span style="color: #86e7d7;">*</span> acc)
+</code></pre>
+
+<p>
+If we were to run it with the input <code>[2, 3, 4]</code> and 1 we would get
+</p>
+
+
+<pre class="code"><code><span class="linenr">1: </span><span style="color: #D8B941;">amultlist</span> [<span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>] <span style="color: #D85F00; font-weight: bold;">1</span>
+<span class="linenr">2: </span><span style="color: #D8B941;">amultlist</span> [<span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>] (<span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #D85F00; font-weight: bold;">1</span>)
+<span class="linenr">3: </span><span style="color: #D8B941;">amultlist</span> [<span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>] <span style="color: #D85F00; font-weight: bold;">2</span>
+<span class="linenr">4: </span><span style="color: #D8B941;">amultlist</span> [<span style="color: #D85F00; font-weight: bold;">4</span>] (<span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #D85F00; font-weight: bold;">2</span>)
+<span class="linenr">5: </span><span style="color: #D8B941;">amultlist</span> [<span style="color: #D85F00; font-weight: bold;">4</span>] <span style="color: #D85F00; font-weight: bold;">6</span>
+<span class="linenr">6: </span><span style="color: #D8B941;">amultlist</span> <span style="color: #3679D8;">[]</span> (<span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">4</span> <span style="color: #D85F00; font-weight: bold;">6</span>)
+<span class="linenr">7: </span><span style="color: #D8B941;">amultlist</span> <span style="color: #3679D8;">[]</span> <span style="color: #D85F00; font-weight: bold;">24</span>
+<span class="linenr">8: </span><span style="color: #D85F00; font-weight: bold;">24</span>
+</code></pre>
+
+<p>
+Notice this time that we only need to keep track of a single call to <code>multlist</code> at any one time&#x2026; the result of one
+call is simply the value of the next call.  We discussed this in the <a href="tail-recursion.html">chapter on <code>tail-recursion</code></a>.  Tail recursive
+functions allow the compiler to eliminate the call-stack, speeding things up and reducing the amount of memory we need
+on the stack.
+</p>
+
+<p>
+Notice the flow of the computations.  In the simple recursion example the function first descended to the end of the
+list and then performed the computations as the recursive calls returned.  It the tail recursive example the
+computations occur first, and then the function passes the result to the recursive call.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf5ed476" class="outline-3">
+<h3 id="orgf5ed476"><span class="section-number-3">2.2.</span> Continuation Passing</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Integers and lists are not the only things a function can accumulate.  We can also accumulate <i>computations</i>.  Consider
+<code>kmultlist</code>, which is the same as <code>amultlist</code> but it is in CPS.
+</p>
+
+<pre class="code"><code><span style="color: #D8B941;">kmultlist</span> <span style="color: #3679D8;">[]</span>     k <span style="color: #86e7d7;">=</span> k <span style="color: #D85F00; font-weight: bold;">1</span>
+<span style="color: #D8B941;">kmultlist</span> (x<span style="color: #3679D8;">:</span>xs) k <span style="color: #86e7d7;">=</span> kmultlist xs (<span style="color: #86e7d7;">\</span>v <span style="color: #86e7d7;">-&gt;</span> k (x <span style="color: #86e7d7;">*</span> v))
+</code></pre>
+
+
+<p>
+As before, we have an extra argument <code>k</code> to specify where the result should go.  If we call <code>kmultlist</code> on the empty
+list, it will pass 1 to <code>k</code>.
+</p>
+
+<p>
+The recursive case is more complex.  Suppose we call <code>kmultlist</code> on a non-empty list <code>x:xs</code>.  In order to compute the
+result, <code>kmultlist</code> needs to make a recursive call on <code>xs</code>.
+</p>
+
+<p>
+This function needs a continuation to tell it what to do with that result.  This continuation captures the result of the
+recursive call, multiplies it by <code>x</code>, and then passes that to the continuation given to the initial call.
+</p>
+
+<p>
+You should notice a correspondence between the continuation and the original direct-style version:
+</p>
+
+<pre class="code"><code><span style="color: #D8B941;">multlist</span> (x<span style="color: #3679D8;">:</span>xs) <span style="color: #86e7d7;">=</span> x <span style="color: #86e7d7;">*</span> multlist xs
+</code></pre>
+
+<p>
+The <code>v</code> parameter is equivalent to <code>multlist xs</code>, and the call to <code>k</code> represents returning the value to the caller.
+</p>
+
+<p>
+Here is a sample run.
+</p>
+
+<pre class="code"><code><span class="linenr"> 9: </span><span style="color: #D8B941;">kmultlist</span> [<span style="color: #D85F00; font-weight: bold;">2</span>,<span style="color: #D85F00; font-weight: bold;">3</span>,<span style="color: #D85F00; font-weight: bold;">4</span>] report
+<span class="linenr">10: </span><span style="color: #D8B941;">kmultlist</span> [<span style="color: #D85F00; font-weight: bold;">3</span>,<span style="color: #D85F00; font-weight: bold;">4</span>] (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> report (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> v1))
+<span class="linenr">11: </span><span style="color: #D8B941;">kmultlist</span> [<span style="color: #D85F00; font-weight: bold;">4</span>] (<span style="color: #86e7d7;">\</span>v2 <span style="color: #86e7d7;">-&gt;</span> (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> report (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> v1)) (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> v2))
+<span class="linenr">12: </span><span style="color: #D8B941;">kmultlist</span> <span style="color: #3679D8;">[]</span> (<span style="color: #86e7d7;">\</span>v3 <span style="color: #86e7d7;">-&gt;</span> (<span style="color: #86e7d7;">\</span>v2 <span style="color: #86e7d7;">-&gt;</span> (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> report (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> v1)) (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> v2)) (<span style="color: #D85F00; font-weight: bold;">4</span> <span style="color: #86e7d7;">*</span> v3))
+<span class="linenr">13: </span>(<span style="color: #86e7d7;">\</span>v3 <span style="color: #86e7d7;">-&gt;</span> (<span style="color: #86e7d7;">\</span>v2 <span style="color: #86e7d7;">-&gt;</span> (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> report (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> v1)) (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> v2)) (<span style="color: #D85F00; font-weight: bold;">4</span> <span style="color: #86e7d7;">*</span> v3)) <span style="color: #D85F00; font-weight: bold;">1</span>
+<span class="linenr">14: </span>(<span style="color: #86e7d7;">\</span>v2 <span style="color: #86e7d7;">-&gt;</span> (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> report (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> v1)) (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> v2)) (<span style="color: #D85F00; font-weight: bold;">4</span> <span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">1</span>))
+<span class="linenr">15: </span>(<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> report (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> v1)) (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">4</span>))
+<span class="linenr">16: </span><span style="color: #D8B941;">report</span> (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> <span style="color: #D85F00; font-weight: bold;">12</span>)
+<span class="linenr">17: </span><span style="color: #D8B941;">report</span> <span style="color: #D85F00; font-weight: bold;">24</span>
+</code></pre>
+
+<p>
+Each recursive call builds a new, larger continuation out of the one it received.
+</p>
+</div>
+
+<div id="outline-container-org8dbf279" class="outline-4">
+<h4 id="org8dbf279"><span class="section-number-4">2.2.1.</span> Comparing</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+In these three coding styles there are two parts to the problem.  To multiply together the elements of a list, you first
+multiply the elements of the rest (i.e., the tail) of the list, and then multiply the first element to that result.
+</p>
+
+<ul class="org-ul">
+<li>In direct style, the function recurses until it reaches the end of the list and performs the multiplications &ldquo;on the way out&rdquo;.</li>
+<li>In accumulator recursion, the function performs the multiplications &ldquo;on the way in&rdquo; using an accumulator.</li>
+<li>In CPS, the recursive call builds a function which, when called with the base case, will perform the computation.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org25b9faf" class="outline-2">
+<h2 id="org25b9faf"><span class="section-number-2">3.</span> Multiple Continuations</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+As we said, a continuation is like a return address, made explicit.  Because we store continuations in variables, there
+is no reason we can&rsquo;t have more than one of them.  Here is a new version of <code>kmultlist</code> function that can &ldquo;bail out&rdquo; of
+a computation.  It passes its continuation to a helper function <code>aux</code>.  Within <code>aux</code> there are two
+variables now that have continuations in them.  It accumulates <code>ks</code> (the &ldquo;succeeding&rdquo; continuation) but also can call
+the original continuation <code>k</code> (the &ldquo;abort&rdquo; continuation).  The continuation <code>sr</code> represents the function&rsquo;s computation;
+call it, and the computation occurs.  The <code>k</code> continuation, if called, will skip all that computation and (appear to!)
+exit out of all the levels of recursion, back to the beginning.
+</p>
+
+<pre class="code"><code><span style="color: #D8B941;">kmultlist</span> xx k <span style="color: #86e7d7;">=</span> aux xx k
+  <span style="color: #D83441;">where</span> aux <span style="color: #3679D8;">[]</span>     ks <span style="color: #86e7d7;">=</span> ks <span style="color: #D85F00; font-weight: bold;">1</span>
+        aux (<span style="color: #D85F00; font-weight: bold;">0</span><span style="color: #3679D8;">:</span>xs) ks <span style="color: #86e7d7;">=</span> k <span style="color: #D85F00; font-weight: bold;">0</span>
+        aux (x<span style="color: #3679D8;">:</span>xs) ks <span style="color: #86e7d7;">=</span> aux xs (<span style="color: #86e7d7;">\</span>v <span style="color: #86e7d7;">-&gt;</span> ks (x <span style="color: #86e7d7;">*</span> v))
+</code></pre>
+
+<p>
+Here is a sample run where we see the abort continuation in action:
+</p>
+
+<pre class="code"><code><span class="linenr">18: </span><span style="color: #D8B941;">kmultlist</span> [<span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">0</span>] report
+<span class="linenr">19: </span><span style="color: #D8B941;">aux</span> [<span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">0</span>] report
+<span class="linenr">20: </span><span style="color: #D8B941;">aux</span> [<span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">0</span>] (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> k (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> v1))
+<span class="linenr">21: </span><span style="color: #D8B941;">aux</span> [<span style="color: #D85F00; font-weight: bold;">0</span>] (<span style="color: #86e7d7;">\</span>v2 <span style="color: #86e7d7;">-&gt;</span> (<span style="color: #86e7d7;">\</span>v1 <span style="color: #86e7d7;">-&gt;</span> k (<span style="color: #D85F00; font-weight: bold;">2</span> <span style="color: #86e7d7;">*</span> v1)) (<span style="color: #D85F00; font-weight: bold;">3</span> <span style="color: #86e7d7;">*</span> v2))
+<span class="linenr">22: </span><span style="color: #D8B941;">report</span> <span style="color: #D85F00; font-weight: bold;">0</span>
+<span class="linenr">23: </span><span style="color: #D85F00; font-weight: bold;">0</span>
+</code></pre>
+
+<p>
+For that matter, why stop at two continuations?  This next version interprets negative numbers in a strange way: if it
+finds a number \(-n\), it undoes <code>n</code> levels of recursion, and activates the computation at that point.
+</p>
+
+<pre class="code"><code><span style="color: #D8B941;">nth</span> <span style="color: #D85F00; font-weight: bold;">0</span> (x<span style="color: #3679D8;">:</span>xs) <span style="color: #86e7d7;">=</span> x
+<span style="color: #D8B941;">nth</span> n (x<span style="color: #3679D8;">:</span>xs) <span style="color: #86e7d7;">=</span> nth (n<span style="color: #86e7d7;">-</span><span style="color: #D85F00; font-weight: bold;">1</span>) xs
+
+<span style="color: #D8B941;">kmultlist</span> xx k <span style="color: #86e7d7;">=</span> aux xx [k]
+  <span style="color: #D83441;">where</span> aux <span style="color: #3679D8;">[]</span>     klist <span style="color: #86e7d7;">=</span> (head klist) <span style="color: #D85F00; font-weight: bold;">1</span>
+        aux (<span style="color: #D85F00; font-weight: bold;">0</span><span style="color: #3679D8;">:</span>xs) <span style="color: #D83441;">_</span>     <span style="color: #86e7d7;">=</span> k <span style="color: #D85F00; font-weight: bold;">0</span>
+        aux (x<span style="color: #3679D8;">:</span>xs) klist <span style="color: #86e7d7;">|</span> x <span style="color: #86e7d7;">&lt;</span> <span style="color: #D85F00; font-weight: bold;">0</span> <span style="color: #86e7d7;">=</span> (nth (<span style="color: #D85F00; font-weight: bold;">0</span><span style="color: #86e7d7;">-</span>x) klist) <span style="color: #D85F00; font-weight: bold;">1</span>
+                         <span style="color: #86e7d7;">|</span> otherwise <span style="color: #86e7d7;">=</span> aux xs ( (<span style="color: #86e7d7;">\</span>v <span style="color: #86e7d7;">-&gt;</span> (head klist) (v <span style="color: #86e7d7;">*</span> x)) <span style="color: #86e7d7;">::</span> klist)
+</code></pre>
+
+<p>
+The following sample run may illustrate the operation of the new function.  Be sure you understand how it works.
+</p>
+
+<pre class="code"><code><span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> kmultlist [<span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>, <span style="color: #D85F00; font-weight: bold;">5</span>, <span style="color: #D85F00; font-weight: bold;">6</span>, <span style="color: #D85F00; font-weight: bold;">1</span>] report
+<span style="color: #D85F00; font-weight: bold;">720</span>
+<span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> kmultlist [<span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>, <span style="color: #D85F00; font-weight: bold;">5</span>, <span style="color: #D85F00; font-weight: bold;">6</span>, <span style="color: #D85F00; font-weight: bold;">1</span>, <span style="color: #D85F00; font-weight: bold;">0</span>, <span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">4</span>, <span style="color: #D85F00; font-weight: bold;">6</span>] report
+<span style="color: #D85F00; font-weight: bold;">0</span>
+<span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> kmultlist [<span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>, <span style="color: #D85F00; font-weight: bold;">5</span>, <span style="color: #D85F00; font-weight: bold;">6</span>, <span style="color: #86e7d7;">-</span><span style="color: #D85F00; font-weight: bold;">1</span>, <span style="color: #D85F00; font-weight: bold;">0</span>, <span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">4</span>, <span style="color: #D85F00; font-weight: bold;">6</span>] report
+<span style="color: #D85F00; font-weight: bold;">120</span>
+<span style="color: #3679D8;">Main</span><span style="color: #D8B941;">&gt;</span> kmultlist [<span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">3</span>, <span style="color: #D85F00; font-weight: bold;">4</span>, <span style="color: #D85F00; font-weight: bold;">5</span>, <span style="color: #D85F00; font-weight: bold;">6</span>, <span style="color: #86e7d7;">-</span><span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">0</span>, <span style="color: #D85F00; font-weight: bold;">2</span>, <span style="color: #D85F00; font-weight: bold;">4</span>, <span style="color: #D85F00; font-weight: bold;">6</span>] report
+<span style="color: #D85F00; font-weight: bold;">24</span>
+</code></pre>
+
+<p>
+Continuations, then, are a means of time travel.  A continuation allows us to save a point of the program and return to
+it any time we want.
+</p>
+</div>
+</div>
+<!-- Footnotes --><!-- 
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+Truth in advertising: in <span class="sc">Haskell</span>, the
+<code>report</code> function actually does return the final result.  But you will
+notice that it is a tail call, so the computation is over by the time that happens.  In
+a language that supports real continuations, a &ldquo;final&rdquo; continuation such as
+<code>report</code> would not return at all.
+</p></div></div>
+
+ --></div>
+<div id="postamble" class="status">
+<p class="author">Author: Mattox Beckman</p>
+<p class="date">Created: 2022-03-19 Sat 14:32</p>
+</div>
+</body>
+</html>

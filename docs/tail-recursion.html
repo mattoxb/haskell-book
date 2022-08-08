@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-08-08 Mon 14:28 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tail Recursion</title>
+<meta name="author" content="Mattox Beckman" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="stylesheet" href="css/tufte.css" type="text/css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Tail Recursion</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orge91dcc4">1. Objectives</a></li>
+<li><a href="#org7fd5c1e">2. Function calls and frames</a>
+<ul>
+<li><a href="#orga514866">2.1. Tail calls</a></li>
+<li><a href="#orgdc85c0d">2.2. Tail Code</a></li>
+</ul>
+</li>
+<li><a href="#orgf73254f">3. Accumulators</a></li>
+<li><a href="#orgda278dd">4. How to write a tail recursive function</a></li>
+<li><a href="#org191af19">5. Problems</a></li>
+</ul>
+</div>
+</div>
+<p>
+There is a special form of recursion called <i>tail recursion</i> that can be compiled to a loop in the machine
+code.  This can save a significant amount of memory if the code needs to make a lot of recursive calls, and in
+a functional language like <span class="sc">Haskell</span> this optimization can make the difference between the code working or
+running out of memory.
+</p>
+
+<div id="outline-container-orge91dcc4" class="outline-2">
+<h2 id="orge91dcc4"><span class="section-number-2">1.</span> Objectives</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+When you are done with this chapter, you will&#x2026;
+</p>
+<ul class="org-ul">
+<li>identify subexpressions that are in tail position,</li>
+<li>explain the advantages of tail-recursive functions compared to direct-style, and</li>
+<li>convert direct-style functions to tail-recursive functions.</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org7fd5c1e" class="outline-2">
+<h2 id="org7fd5c1e"><span class="section-number-2">2.</span> Function calls and frames</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+When a program calls a function, the computer allocates memory for the particular instance of that call.
+This memory is called a <i>stack frame</i> or sometimes an <i>activation record</i>.
+</p>
+
+<p>
+For example, suppose we have the following Haskell code:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">foo</span> x <span style="color: #dcaeea;">=</span>
+  <span style="color: #51afef;">let</span> a <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">10</span>
+      b <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">20</span>
+  <span style="color: #51afef;">in</span> a <span style="color: #dcaeea;">+</span> b <span style="color: #dcaeea;">+</span> bar x
+<span style="color: #c678dd;">bar</span> x <span style="color: #dcaeea;">=</span>
+  <span style="color: #51afef;">let</span> a <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">30</span>
+      b <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">40</span>
+  <span style="color: #51afef;">in</span> a <span style="color: #dcaeea;">+</span> b <span style="color: #dcaeea;">+</span> baz x
+<span style="color: #c678dd;">baz</span> x <span style="color: #dcaeea;">=</span>
+  <span style="color: #51afef;">let</span> a <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">50</span>
+      b <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">60</span>
+  <span style="color: #51afef;">in</span> a <span style="color: #dcaeea;">+</span> b <span style="color: #dcaeea;">+</span> x
+</code></pre>
+
+<p>
+If we call <code>foo 10</code>, the program will allocate a frame for <code>foo</code>.  When <code>foo</code>
+calls <code>bar</code>, the program allocates a frame for <code>bar</code>, and when <code>bar</code> called
+<code>baz</code> a frame gets allocated for <code>baz</code> too.
+</p>
+
+<p>
+The important thing to note is that while <code>baz</code> is running, the frames for <code>foo</code> and
+<code>bar</code> are still in memory, since they are waiting for the results of <code>baz</code>.
+</p>
+
+<p>
+When a function is recursive, we can end up with a lot of frames.  Take this factorial code
+for example:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">fact</span> <span style="color: #da8548; font-weight: bold;">0</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">fact</span> n <span style="color: #dcaeea;">=</span> n <span style="color: #dcaeea;">*</span> fact (n<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>)
+</code></pre>
+
+<p>
+Computing the factorial of 100 will require 100 frames.
+</p>
+</div>
+
+<div id="outline-container-orga514866" class="outline-3">
+<h3 id="orga514866"><span class="section-number-3">2.1.</span> Tail calls</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Now consider this code.
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">foo</span> x <span style="color: #dcaeea;">=</span>
+  <span style="color: #51afef;">let</span> a <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">10</span>
+      b <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">20</span>
+  <span style="color: #51afef;">in</span> bar (a <span style="color: #dcaeea;">+</span> b <span style="color: #dcaeea;">+</span> x)
+<span style="color: #c678dd;">bar</span> x <span style="color: #dcaeea;">=</span>
+  <span style="color: #51afef;">let</span> a <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">30</span>
+      b <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">40</span>
+  <span style="color: #51afef;">in</span> baz (a <span style="color: #dcaeea;">+</span> b <span style="color: #dcaeea;">+</span> x)
+<span style="color: #c678dd;">baz</span> x <span style="color: #dcaeea;">=</span>
+  <span style="color: #51afef;">let</span> a <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">50</span>
+      b <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">60</span>
+  <span style="color: #51afef;">in</span> a <span style="color: #dcaeea;">+</span> b <span style="color: #dcaeea;">+</span> x
+</code></pre>
+
+<p>
+When <code>foo</code> calls <code>bar</code>, note that whatever <code>bar</code> returns will be the value for <code>foo</code> as well.  Similarly,
+when <code>bar</code> calls <code>baz</code>, whatever <code>baz</code> return will be the return value for <code>bar</code>.  The function <code>foo</code> will not
+need to keep track of its variables after calling <code>bar</code> since it will not be using them again, and likewise when
+<code>bar</code> calls <code>baz</code>.
+</p>
+
+<p>
+So, instead of keeping those stack frames around, the compiler will allow <code>bar</code> to use the same memory that
+<code>foo</code> was using, and in turn allow <code>baz</code> to use that same memory as well once <code>bar</code> calls <code>baz</code>.  The function
+calls get eliminated and replaced by straight-line code.
+</p>
+
+<p>
+The question is: <i>how do we know when it&rsquo;s safe to do this</i>?  The answer is that we can
+eliminate the function call if the call is in <i>tail position</i>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdc85c0d" class="outline-3">
+<h3 id="orgdc85c0d"><span class="section-number-3">2.2.</span> Tail Code</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+There are certain kinds of expressions that have subexpressions that will become the value of the whole expression
+if evaluated.  These subexpressions are said to be in tail position.  Consider this code:
+</p>
+
+<pre class="code"><code><span style="color: #51afef;">if</span> a <span style="color: #dcaeea;">&gt;</span> b <span style="color: #51afef;">then</span> c <span style="color: #51afef;">else</span> d
+
+<span style="color: #51afef;">let</span> e <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">10</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">20</span>
+ <span style="color: #51afef;">in</span> f
+
+<span style="color: #c678dd;">foo</span> <span style="color: #da8548; font-weight: bold;">0</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">foo</span> n <span style="color: #dcaeea;">=</span> foo (n<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>)
+</code></pre>
+
+<p>
+The variables <code>c</code>, <code>d</code>, and <code>f</code> are in tail position.  The expressions <code>a&gt;b</code>, <code>10+20</code>, and <code>n-1</code> are not in
+tail position.  If <code>a&gt;b</code> is true, and <code>c</code> has value 99, then the value of the whole <code>if</code> expression will be 99.
+</p>
+
+<p>
+Note that not every expression has subexpressions that are in tail position.
+</p>
+
+<p>
+Here is a non-exhaustive list of tail subexpressions:
+</p>
+<ul class="org-ul">
+<li>The <i>then</i> and <i>else</i> branches of an <code>if</code> expression</li>
+<li>The return values in a <code>case</code> expression</li>
+<li>The body of a <code>let</code> expression</li>
+<li>The return value of a function</li>
+</ul>
+
+<p>
+If the expression that is in tail position happens to be a function call, then we call it a <i>tail call</i>.
+The call <code>foo (n-1)</code> is a tail call.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf73254f" class="outline-2">
+<h2 id="orgf73254f"><span class="section-number-2">3.</span> Accumulators</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+In direct-style recursion, the function makes all the calls and traverses the data structure.  Once it hits the
+end of the data structure (or base case), it returns to the caller and performs the computations &ldquo;on the way out&rdquo;.
+</p>
+
+<p>
+Consider this function that sums up the elements of a list.
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">sum</span> <span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">0</span>
+<span style="color: #c678dd;">sum</span> (x<span style="color: #ECBE7B;">:</span>xs) <span style="color: #dcaeea;">=</span> x <span style="color: #dcaeea;">+</span> sum xs
+</code></pre>
+
+<p>
+If we apply <code>sum</code> to the list <code>[2,3,4,5,6]</code>, <code>sum</code> will traverse to the end of the list, and then do all the
+adding as things get returned.  We can trace the execution this way, where each line is the next call or
+return:
+</p>
+
+<pre class="code"><code><span class="linenr"> 1: </span><span style="color: #c678dd;">sum</span> [<span style="color: #da8548; font-weight: bold;">2</span>,<span style="color: #da8548; font-weight: bold;">3</span>,<span style="color: #da8548; font-weight: bold;">4</span>,<span style="color: #da8548; font-weight: bold;">5</span>,<span style="color: #da8548; font-weight: bold;">6</span>]
+<span class="linenr"> 2: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> sum [<span style="color: #da8548; font-weight: bold;">3</span>,<span style="color: #da8548; font-weight: bold;">4</span>,<span style="color: #da8548; font-weight: bold;">5</span>,<span style="color: #da8548; font-weight: bold;">6</span>]
+<span class="linenr"> 3: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #dcaeea;">+</span> sum [<span style="color: #da8548; font-weight: bold;">4</span>,<span style="color: #da8548; font-weight: bold;">5</span>,<span style="color: #da8548; font-weight: bold;">6</span>]
+<span class="linenr"> 4: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">4</span> <span style="color: #dcaeea;">+</span> sum [<span style="color: #da8548; font-weight: bold;">5</span>,<span style="color: #da8548; font-weight: bold;">6</span>]
+<span class="linenr"> 5: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">4</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">5</span> <span style="color: #dcaeea;">+</span> sum [<span style="color: #da8548; font-weight: bold;">6</span>]
+<span class="linenr"> 6: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">4</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">5</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">6</span> <span style="color: #dcaeea;">+</span> sum <span style="color: #ECBE7B;">[]</span>
+<span class="linenr"> 7: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">4</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">5</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">6</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">0</span>
+<span class="linenr"> 8: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">4</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">5</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">6</span>
+<span class="linenr"> 9: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">4</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">11</span>
+<span class="linenr">10: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">3</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">15</span>
+<span class="linenr">11: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">2</span> <span style="color: #dcaeea;">+</span> <span style="color: #da8548; font-weight: bold;">18</span>
+<span class="linenr">12: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">20</span>
+</code></pre>
+
+<p>
+If the function is in tail form, then we need to do the computation as we make the tail calls.  This usually
+requires an extra parameter to keep track of the computation as we go.  For example:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">tsum</span> <span style="color: #ECBE7B;">[]</span> a <span style="color: #dcaeea;">=</span> a
+<span style="color: #c678dd;">tsum</span> (x<span style="color: #ECBE7B;">:</span>xs) a <span style="color: #dcaeea;">=</span> tsum xs (x<span style="color: #dcaeea;">+</span>a)
+</code></pre>
+
+<p>
+If we call <code>tsum [2,3,4,5,6] 0</code> it will look like this:
+</p>
+
+<pre class="code"><code><span class="linenr">1: </span><span style="color: #c678dd;">tsum</span> [<span style="color: #da8548; font-weight: bold;">2</span>,<span style="color: #da8548; font-weight: bold;">3</span>,<span style="color: #da8548; font-weight: bold;">4</span>,<span style="color: #da8548; font-weight: bold;">5</span>,<span style="color: #da8548; font-weight: bold;">6</span>] <span style="color: #da8548; font-weight: bold;">0</span>
+<span class="linenr">2: </span><span style="color: #dcaeea;">=</span> tsum [<span style="color: #da8548; font-weight: bold;">3</span>,<span style="color: #da8548; font-weight: bold;">4</span>,<span style="color: #da8548; font-weight: bold;">5</span>,<span style="color: #da8548; font-weight: bold;">6</span>] <span style="color: #da8548; font-weight: bold;">2</span>
+<span class="linenr">3: </span><span style="color: #dcaeea;">=</span> tsum [<span style="color: #da8548; font-weight: bold;">4</span>,<span style="color: #da8548; font-weight: bold;">5</span>,<span style="color: #da8548; font-weight: bold;">6</span>] <span style="color: #da8548; font-weight: bold;">5</span>
+<span class="linenr">4: </span><span style="color: #dcaeea;">=</span> tsum [<span style="color: #da8548; font-weight: bold;">5</span>,<span style="color: #da8548; font-weight: bold;">6</span>] <span style="color: #da8548; font-weight: bold;">9</span>
+<span class="linenr">5: </span><span style="color: #dcaeea;">=</span> tsum [<span style="color: #da8548; font-weight: bold;">6</span>] <span style="color: #da8548; font-weight: bold;">14</span>
+<span class="linenr">6: </span><span style="color: #dcaeea;">=</span> tsum <span style="color: #ECBE7B;">[]</span> <span style="color: #da8548; font-weight: bold;">20</span>
+<span class="linenr">7: </span><span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">20</span>
+</code></pre>
+
+<p>
+Notice that the computation happens &ldquo;on the way in&rdquo;, and when we reach the base case the computation is complete.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgda278dd" class="outline-2">
+<h2 id="orgda278dd"><span class="section-number-2">4.</span> How to write a tail recursive function</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+There are four steps:
+</p>
+
+<ol class="org-ol">
+<li>Add an accumulator parameter to your function.</li>
+<li>The base case returns the accumulator.  It is okay if you do some computation on it.</li>
+<li>The recursive case calls with an updated value for the accumulator.  Once the code makes
+the recursive call it <b>cannot do anything else</b> once it returns or else it is not it tail position.</li>
+<li>When calling the tail function initially, pass in the result that should get returned by the base case.
+(E.g., for <code>tsum</code> we called it with a 0.  If was a product we would have passed in <code>1</code>)</li>
+</ol>
+
+<p>
+We often like to create a helper function that does the recursion, and have the main function be responsible
+for passing in the initial value.  Here is what <code>tsum</code> would look like:
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">tsum</span> xx <span style="color: #dcaeea;">=</span> aux xx <span style="color: #da8548; font-weight: bold;">0</span>
+  <span style="color: #51afef;">where</span> aux <span style="color: #ECBE7B;">[]</span>     a <span style="color: #dcaeea;">=</span> a
+        aux (x<span style="color: #ECBE7B;">:</span>xs) a <span style="color: #dcaeea;">=</span> aux xs (x<span style="color: #dcaeea;">+</span>a)
+</code></pre>
+</div>
+</div>
+
+<div id="outline-container-org191af19" class="outline-2">
+<h2 id="org191af19"><span class="section-number-2">5.</span> Problems</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Here is some code written in direct style.  Try converting them to tail recursion.  The answers are below.
+</p>
+
+<pre class="code"><code><span style="color: #c678dd;">prod</span> <span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">prod</span> (x<span style="color: #ECBE7B;">:</span>xs) <span style="color: #dcaeea;">=</span> x <span style="color: #dcaeea;">*</span> prod xs
+
+<span style="color: #c678dd;">fact</span> <span style="color: #da8548; font-weight: bold;">0</span> <span style="color: #dcaeea;">=</span> <span style="color: #da8548; font-weight: bold;">1</span>
+<span style="color: #c678dd;">fact</span> n <span style="color: #dcaeea;">=</span> n <span style="color: #dcaeea;">*</span> fact (n<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>)
+
+<span style="color: #c678dd;">filter</span> f <span style="color: #ECBE7B;">[]</span> <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">[]</span>
+<span style="color: #c678dd;">filter</span> f (x<span style="color: #ECBE7B;">:</span>xs) <span style="color: #dcaeea;">=</span> <span style="color: #51afef;">if</span> f x <span style="color: #51afef;">then</span> x <span style="color: #ECBE7B;">:</span> rest
+                         <span style="color: #51afef;">else</span> rest
+    <span style="color: #51afef;">where</span> rest <span style="color: #dcaeea;">=</span> filter f xs
+</code></pre>
+
+<details>
+<summary>solution for prod</summary>
+<pre class="code"><code><span style="color: #c678dd;">prod</span> xx <span style="color: #dcaeea;">=</span> aux xx <span style="color: #da8548; font-weight: bold;">1</span>
+  <span style="color: #51afef;">where</span> aux <span style="color: #ECBE7B;">[]</span>     a <span style="color: #dcaeea;">=</span> a
+        aux (x<span style="color: #ECBE7B;">:</span>xs) a <span style="color: #dcaeea;">=</span> prod xs (x<span style="color: #dcaeea;">*</span>a)
+</code></pre>
+</details>
+
+<details>
+<summary>solution for fact</summary>
+<pre class="code"><code><span style="color: #c678dd;">fact</span> n <span style="color: #dcaeea;">=</span> aux n <span style="color: #da8548; font-weight: bold;">1</span>
+  <span style="color: #51afef;">where</span> aux <span style="color: #da8548; font-weight: bold;">0</span> a <span style="color: #dcaeea;">=</span> a
+        aux m a <span style="color: #dcaeea;">=</span> aux (m<span style="color: #dcaeea;">-</span><span style="color: #da8548; font-weight: bold;">1</span>) (m<span style="color: #dcaeea;">*</span>a)
+</code></pre>
+</details>
+
+<details>
+<summary>solution for filter</summary>
+<pre class="code"><code><span style="color: #c678dd;">filter</span> f xx <span style="color: #dcaeea;">=</span> aux xx <span style="color: #ECBE7B;">[]</span>
+  <span style="color: #51afef;">where</span> aux <span style="color: #ECBE7B;">[]</span>     a <span style="color: #dcaeea;">=</span> reverse a  <span style="color: #5B6268;">-- </span><span style="color: #5B6268;">We need to reverse the list to preserve the original order</span>
+        aux (x<span style="color: #ECBE7B;">:</span>xs) a <span style="color: #dcaeea;">=</span> <span style="color: #51afef;">if</span> f x
+                         <span style="color: #51afef;">then</span> aux xs (x<span style="color: #ECBE7B;">:</span>a)
+                         <span style="color: #51afef;">else</span> aux xs a
+
+                         <span style="color: #5B6268;">-- </span><span style="color: #5B6268;">or --</span>
+
+<span style="color: #c678dd;">filter</span> f xx <span style="color: #dcaeea;">=</span> aux (reverse xx) <span style="color: #ECBE7B;">[]</span> <span style="color: #5B6268;">-- </span><span style="color: #5B6268;">We can reverse the input first if we like.</span>
+  <span style="color: #51afef;">where</span> aux <span style="color: #ECBE7B;">[]</span>     a <span style="color: #dcaeea;">=</span> a
+        aux (x<span style="color: #ECBE7B;">:</span>xs) a <span style="color: #dcaeea;">=</span> <span style="color: #51afef;">if</span> f x
+                         <span style="color: #51afef;">then</span> aux xs (x<span style="color: #ECBE7B;">:</span>a)
+                         <span style="color: #51afef;">else</span> aux xs a
+</code></pre>
+</details>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Mattox Beckman</p>
+<p class="date">Created: 2022-08-08 Mon 14:28</p>
+</div>
+</body>
+</html>

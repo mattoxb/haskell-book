@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-07-26 Tue 10:18 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Disjoint Types</title>
+<meta name="author" content="Mattox Beckman" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<link rel="stylesheet" href="../css/tufte.css" type="text/css" />
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Disjoint Types</h1>
+
+<div id="outline-container-orgaf559c6" class="outline-2">
+<h2 id="orgaf559c6">Objectives</h2>
+<div class="outline-text-2" id="text-orgaf559c6">
+<p>
+When you are done with this chapter, you will&#x2026;.
+</p>
+
+<ul class="org-ul">
+<li>explain what a disjoint type is.</li>
+<li>describe the components of a disjoint type:
+<ul class="org-ul">
+<li>type names, constructors, and parameters.</li>
+</ul></li>
+<li>use disjoint types to declare linked lists, options, and binary trees.
+<ul class="org-ul">
+<li>write functions that traverse and manipulate them.</li>
+</ul></li>
+<li>explain how memory is allocated when data is immutable.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbf740f0" class="outline-2">
+<h2 id="orgbf740f0">What are Disjoint Types?</h2>
+<div class="outline-text-2" id="text-orgbf740f0">
+<p>
+A <i>disjoint type</i> is a type that can take one or more non-overlapping forms.  For example, one representation of a list is either an empty list or a
+pair where the first element is a datum and the second is a reference to another list.  Another example is a binary tree, where you have nodes containing
+data and references to children, or else a leaf node that has neither.  In our class we will use disjoint types to represent <i>expression trees</i>.
+</p>
+
+<p>
+In contrast, a complex number is <i>not</i> a disjoint type.  It has a real part and an imaginary part, but these always come together.  This applies also to
+data structures like pairs, arrays, or strings.  Each of these may have components, but there is fundamentally only one representation for them.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgae0c5a1" class="outline-2">
+<h2 id="orgae0c5a1">Syntax</h2>
+<div class="outline-text-2" id="text-orgae0c5a1">
+<p>
+The keyword <code>data</code> starts a disjoint type declaration.  You then supply a name (capitalized) followed by zero or more <i>type variables</i> (lower case).
+After that you declare one or more <i>constructors</i> (capitalized), each with zero or more type names to be used as positional parameters.
+</p>
+
+<p>
+That will make more sense if you see some examples.
+</p>
+</div>
+
+<div id="outline-container-orgd442420" class="outline-3">
+<h3 id="orgd442420">Example 1 &#x2014; Integer Lists</h3>
+<div class="outline-text-3" id="text-orgd442420">
+<p>
+For our first example, we will make a linked list similar to the built-in one, but it will only accept integers.
+</p>
+
+<pre class="code"><code><span style="color: #51afef;">data</span> <span style="color: #ECBE7B;">IList</span> <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">ICons</span> <span style="color: #ECBE7B;">Integer</span> <span style="color: #ECBE7B;">IList</span>
+           <span style="color: #dcaeea;">|</span> <span style="color: #ECBE7B;">INil</span>
+    <span style="color: #51afef;">deriving</span> (<span style="color: #ECBE7B;">Eq</span>,<span style="color: #ECBE7B;">Show</span>)
+</code></pre>
+
+<ul class="org-ul">
+<li>The name of the type is <code>IList</code>.  There are no type parameters for this type.</li>
+<li>The first constructor is <code>ICons</code> and takes two parameters: an <code>Integer</code> and another <code>IList</code>.</li>
+<li>The second constructor is <code>INil</code> and takes no parameters.</li>
+<li>The <code>deriving (Show,Eq)</code> tells  <span class="sc">Haskell</span> to define <code>show</code> and equality operations so we can print these out and compare them.</li>
+</ul>
+
+<p>
+You can think of <code>IList</code> as being something like a class in object oriented languages, and <code>ICons</code> and <code>INil</code> being two kinds of constructors for it.
+Calling either one of these will get you an <code>IList</code>, and in fact these are functions.
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t <span style="color: #ECBE7B;">INil</span>
+<span style="color: #ECBE7B;">INil</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">IList</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t <span style="color: #ECBE7B;">ICons</span>
+<span style="color: #ECBE7B;">ICons</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Integer</span> <span style="color: #dcaeea;">-&gt;</span> <span style="color: #ECBE7B;">IList</span> <span style="color: #dcaeea;">-&gt;</span> <span style="color: #ECBE7B;">IList</span>
+</code></pre>
+
+<p>
+Let&rsquo;s create a few lists:
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> i1 <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">INil</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> i2 <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">ICons</span> <span style="color: #da8548; font-weight: bold;">10</span> (<span style="color: #ECBE7B;">ICons</span> <span style="color: #da8548; font-weight: bold;">20</span> <span style="color: #ECBE7B;">INil</span>)
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> i3 <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">ICons</span> <span style="color: #da8548; font-weight: bold;">44</span> i2
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> i3
+<span style="color: #ECBE7B;">ICons</span> <span style="color: #da8548; font-weight: bold;">44</span> (<span style="color: #ECBE7B;">ICons</span> <span style="color: #da8548; font-weight: bold;">10</span> (<span style="color: #ECBE7B;">ICons</span> <span style="color: #da8548; font-weight: bold;">20</span> <span style="color: #ECBE7B;">INil</span>))
+</code></pre>
+
+<p>
+Variable <code>i1</code> just contains an <code>INil</code>.  Variable <code>i2</code> is a list containing 10 and 20.  Variable <code>i3</code> contains 44, 10, and 20.
+</p>
+</div>
+
+<div id="outline-container-org6a14797" class="outline-4">
+<h4 id="org6a14797">Memory Considerations</h4>
+<div class="outline-text-4" id="text-org6a14797">
+<p>
+It is helpful if you understand how memory is allocated.  The rule is simple: whenever you see the name of a constructor in an
+expression context (i.e., not as a function pattern) it allocates memory.  If you see a variable then it is a reference, sharing
+the memory. So there are five memory allocations in the above code.  Variables <code>i2</code> and <code>i3</code> share the list containing 10 and 20.
+</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+<div id="outline-container-orgaa0a9f5" class="outline-3">
+<h3 id="orgaa0a9f5">Example 2 &#x2014; List of Anything</h3>
+</div>
+
+<div id="outline-container-org917f323" class="outline-3">
+<h3 id="org917f323">Example 3 &#x2014; Options</h3>
+</div>
+
+<div id="outline-container-org3f748d7" class="outline-3">
+<h3 id="org3f748d7">Example 4 &#x2014; Binary Trees</h3>
+</div>
+
+<div id="outline-container-org6af916b" class="outline-3">
+<h3 id="org6af916b">Example 5 &#x2014; Something Crazy</h3>
+<div class="outline-text-3" id="text-org6af916b">
+<p>
+Here&rsquo;s an example:
+</p>
+
+<pre class="code"><code><span style="color: #51afef;">data</span> <span style="color: #ECBE7B;">Foo</span> a b <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">Bar</span> <span style="color: #ECBE7B;">Integer</span> a
+             <span style="color: #dcaeea;">|</span> <span style="color: #ECBE7B;">Baz</span> b
+             <span style="color: #dcaeea;">|</span> <span style="color: #ECBE7B;">Quux</span>
+    <span style="color: #51afef;">deriving</span> (<span style="color: #ECBE7B;">Show</span>,<span style="color: #ECBE7B;">Eq</span>)
+</code></pre>
+
+<p>
+In this example, <code>Foo</code> is the name of the type, and it takes two type variables <code>a</code> and <code>b</code>.  The three constructors are <code>Bar</code>, <code>Baz</code>, and <code>Quux</code>.
+As you see, it&rsquo;s possible for a constructor to take no parameters at all.
+To instantiate this, you can use the <code>REPL</code>.
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> x <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">Bar</span> <span style="color: #da8548; font-weight: bold;">10</span> <span style="color: #ECBE7B;">True</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> y <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">Baz</span> <span style="color: #98be65;">"Hi"</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> z <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">Quux</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> x
+<span style="color: #ECBE7B;">Bar</span> <span style="color: #da8548; font-weight: bold;">10</span> <span style="color: #ECBE7B;">True</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> y
+<span style="color: #ECBE7B;">Baz</span> <span style="color: #98be65;">"Hi"</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> z
+<span style="color: #ECBE7B;">Quux</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t x
+<span style="color: #c678dd;">x</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Foo</span> <span style="color: #ECBE7B;">Bool</span> b
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t y
+<span style="color: #c678dd;">y</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Foo</span> a [<span style="color: #ECBE7B;">Char</span>]
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t z
+<span style="color: #c678dd;">z</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Foo</span> a b
+</code></pre>
+
+<p>
+Notice that <code>Bar</code> takes two parameters, and the type of the second parameter determines the type of type parameter <code>a</code>.  The second type <code>b</code> is was unspecified by
+<code>x</code> so it is left there.  This is similar to what you saw with the empty list having type <code>[a]</code> earlier.
+</p>
+
+<p>
+You can use a type declaration to force the unconstrained part if necessary:
+</p>
+
+<pre class="code"><code><span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> a <span style="color: #dcaeea;">=</span> <span style="color: #ECBE7B;">Bar</span> <span style="color: #da8548; font-weight: bold;">10</span> <span style="color: #ECBE7B;">True</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Foo</span> <span style="color: #ECBE7B;">Bool</span> <span style="color: #ECBE7B;">String</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> a
+<span style="color: #ECBE7B;">Bar</span> <span style="color: #da8548; font-weight: bold;">10</span> <span style="color: #ECBE7B;">True</span>
+<span style="color: #ECBE7B;">Prelude</span><span style="color: #c678dd;">&gt;</span> <span style="color: #ECBE7B;">:</span>t a
+<span style="color: #c678dd;">a</span> <span style="color: #dcaeea;">::</span> <span style="color: #ECBE7B;">Foo</span> <span style="color: #ECBE7B;">Bool</span> <span style="color: #ECBE7B;">String</span>
+</code></pre>
+
+<p>
+It
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org553659a" class="outline-2">
+<h2 id="org553659a">References</h2>
+<div class="outline-text-2" id="text-org553659a">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Mattox Beckman</p>
+<p class="date">Created: 2022-07-26 Tue 10:18</p>
+</div>
+</body>
+</html>
